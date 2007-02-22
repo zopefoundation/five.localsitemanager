@@ -26,9 +26,10 @@ Place a ``five.localsitemanager-configure.zcml`` file into your instance's
 
   <include package="five.localsitemanager" />
 
-Alternatively, you can also add this line to the bottom of
-``etc/site.zcml``.
+Also setup a ``five.localsitemanager-overrides.zcml`` file into your instance's
+``etc/package-includes`` directory with the following contents::
 
+  <include package="five.localsitemanager" file="overrides.zcml" />
 
 Running the Tests
 -----------------

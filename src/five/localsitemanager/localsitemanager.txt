@@ -12,12 +12,16 @@ Of course we now need to transform that IPossibleSite into a real ISite.
     >>> import zope.component
     >>> from zope.app.component.hooks import setSite as setActiveSite
 
-    >>> from five.localsitemanager.browser import ObjectManagerSiteView
-    >>> siteconfig = ObjectManagerSiteView(site, None)
-    >>> siteconfig.makeSite()
+    >>> from five.localsitemanager import make_objectmanager_site
+    >>> make_objectmanager_site(site)
     >>> sitemanager = site.getSiteManager()
     >>> sitemanager
-    <FivePersistentComponents ...>
+    <PersistentComponents five>
+
+Make sure this site has it's ``__bases__`` configure appropriately.
+
+    >>> sitemanager.__bases__
+    (<BaseGlobalComponents ...>,)
 
 Utilities
 ---------
@@ -28,19 +32,19 @@ by setting up a test utility.
     >>> from OFS.SimpleItem import SimpleItem
     >>> from zope import interface
 
-    >>> class ITestUtility(interface.Interface):
-    ...     def helloworld(): pass
-
-    >>> class TestUtility(SimpleItem):
+    >>> class ITestUtility(interface.Interface): pass
+    >>> class TestUtility(object):
     ...     interface.implements(ITestUtility)
-    ...     def helloworld(self):
-    ...         print 'Hello World'
+    ...     def __init__(self, id):
+    ...         self.id = id
+    ...     def __repr__(self):
+    ...         return '<Utility %s "%s">' % (self.__class__.__name__, self.id)
 
     >>> sitemanager.registerUtility(TestUtility('test'),
     ...                             name=u'hello_world',
     ...                             provided=ITestUtility)
     >>> sitemanager.getUtility(ITestUtility, name=u'hello_world')
-    <TestUtility ...>
+    <Utility TestUtility "test">
 
 Make sure the utility lookup only works when the correct active site has
 been configured.
@@ -51,7 +55,7 @@ been configured.
 
     >>> setActiveSite(site)
     >>> zope.component.queryUtility(ITestUtility, name=u'hello_world')
-    <TestUtility ...>
+    <Utility TestUtility "test">
 
 Adapters
 ---------
@@ -63,27 +67,35 @@ by setting up a test adapter.
     >>> from zope import interface
 
     >>> class IFoo(interface.Interface): pass
-    >>> class Foo(object): interface.implements(IFoo)
+    >>> class Foo(object):
+    ...     interface.implements(IFoo)
+    ...     def __init__(self, id):
+    ...         self.id = id
 
     >>> class ITestAdapter(interface.Interface): pass
-    >>> class TestAdapter(SimpleItem): interface.implements(ITestAdapter)
-
+    >>> class TestAdapter(object):
+    ...     interface.implements(ITestAdapter)
+    ...     def __init__(self, context):
+    ...         self.context = context
+    ...     def __repr__(self):
+    ...         return '<Adapter %s adapting "%s">' % (self.__class__.__name__,
+    ...                                                self.context.id)
 
     >>> sitemanager.registerAdapter(TestAdapter,
     ...                             required=(IFoo,),
     ...                             provided=ITestAdapter)
-    >>> sitemanager.getAdapter(Foo(), ITestAdapter)
-    <TestAdapter ...>
+    >>> sitemanager.getAdapter(Foo('foo'), ITestAdapter)
+    <Adapter TestAdapter adapting "foo">
 
 Make sure the adapter lookup only works when the correct active site has
 been configured.
 
     >>> setActiveSite(None)
-    >>> zope.component.queryAdapter(Foo(), ITestAdapter) is None
+    >>> zope.component.queryAdapter(Foo('foo'), ITestAdapter) is None
     True
 
     >>> setActiveSite(site)
-    >>> zope.component.queryAdapter(Foo(), ITestAdapter)
-    <TestAdapter ...>
-    >>> ITestAdapter(Foo())
-    <TestAdapter ...>
+    >>> zope.component.queryAdapter(Foo('foo'), ITestAdapter)
+    <Adapter TestAdapter adapting "foo">
+    >>> ITestAdapter(Foo('foo'))
+    <Adapter TestAdapter adapting "foo">

@@ -1,4 +1,6 @@
+from Acquisition import aq_parent, aq_base
 from zope.component.globalregistry import base
+from zope.traversing.interfaces import IContainmentRoot
 from zope.app.component.interfaces import ISite
 from zope.component.persistentregistry import PersistentComponents
 from Products.Five.component.interfaces import IObjectManagerSite
@@ -19,4 +21,70 @@ def make_site(obj, iface=ISite):
     obj.setSiteManager(components)
 
 def make_objectmanager_site(obj):
+    """Just a bit of sugar coating to make an unnofficial objectmanager
+    based site.
+    """
+    
     make_site(obj, IObjectManagerSite)
+
+def get_parent(obj):
+    """Returns the container the object was traversed via.  This
+    is a version of zope.traversing.api.getParent that is designed to
+    handle acquisition as well.
+
+    Returns None if the object is a containment root.
+    Raises TypeError if the object doesn't have enough context to get the
+    parent.
+    """
+    
+    if IContainmentRoot.providedBy(obj):
+        return None
+    
+    parent = getattr(obj, '__parent__', None)
+    if parent is not None:
+        return parent
+
+    parent = aq_parent(obj)
+    if parent is not None:
+        return parent
+
+    raise TypeError("Not enough context information to get parent", obj)
+
+
+def find_next_sitemanager(site):
+    """Find the closest sitemanager that is not the specified site's
+    sitemanager.
+    """
+    
+    container = site
+    sm = None
+    while sm is None:
+        if IContainmentRoot.providedBy(container):
+            # we're the root site, return None
+            return None
+
+        try:
+            container = get_parent(container)
+        except TypeError:
+            # there was not enough context; probably run from a test
+            return None
+
+        if ISite.providedBy(container):
+            sm = container.getSiteManager()
+    return sm
+
+def update_sitemanager_bases(site):
+    """Formulate the most appropriate __bases__ value for a site's site manager
+    by asking find_next_sitemanager what the next appropriate site manager
+    is.  After this call, the __bases__ is guaranteed to have one and only
+    one value in the __bases__ list/tuple.
+    """
+    
+    next = find_next_sitemanager(site)
+    if next is None:
+        next = base
+    sm = site.getSiteManager()
+    sm.__bases__ = (next, )
+
+def update_sitemanager_bases_handler(site, event):
+    update_sitemanager_bases(site)

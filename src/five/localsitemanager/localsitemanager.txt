@@ -99,3 +99,61 @@ been configured.
     <Adapter TestAdapter adapting "foo">
     >>> ITestAdapter(Foo('foo'))
     <Adapter TestAdapter adapting "foo">
+
+Nested Sites
+------------
+
+Whenever a component is queried using the component registry, the active
+component registry (ie site manager) needs to be smart enough to check
+all *parent* component registries as well.
+
+Implementation-wise this means that each component registry needs to have
+an appropriate ``__bases__`` attribute configured that is aware of
+containment and (in the case of Zope 2) acquisition to some respect.
+
+Start by creating some nested sites.
+
+    >>> from five.localsitemanager import update_sitemanager_bases
+
+    >>> folder1 = Folder('folder1')
+    >>> make_objectmanager_site(folder1)
+    >>> update_sitemanager_bases(folder1)
+
+    >>> folder1_1 = Folder('folder1_1')
+    >>> make_objectmanager_site(folder1_1)
+    >>> ignored = folder1._setObject('folder1_1', folder1_1)
+    >>> folder1_1 = folder1['folder1_1']
+    >>> update_sitemanager_bases(folder1_1)
+
+Now we check the actual next-site-lookup logic to make sure it's working.
+
+    >>> from five.localsitemanager import find_next_sitemanager, get_parent
+
+Needed to implement our own get_parent (zope3 has one) that is acquisition
+aware.
+
+    >>> get_parent(folder1)
+    Traceback (most recent call last):
+      ...
+    TypeError: ('Not enough context...
+
+    >>> get_parent(folder1_1)
+    <Folder at folder1>
+
+Any logic that sets up a site manager's ``__bases__`` will use the
+``find_next_sitemanager`` function to figure out the next closest place
+to look.
+
+    >>> find_next_sitemanager(folder1) is None
+    True
+
+    >>> find_next_sitemanager(folder1_1)
+    <PersistentComponents ...>
+
+Now we make sure that that the ``__bases__`` have been setup appropriately.
+
+    >>> folder1.getSiteManager().__bases__
+    (<BaseGlobalComponents base>,)
+
+    >>> folder1_1.getSiteManager().__bases__
+    (<PersistentComponents ...>,)

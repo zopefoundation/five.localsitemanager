@@ -16,7 +16,7 @@ Of course we now need to transform that IPossibleSite into a real ISite.
     >>> make_objectmanager_site(site)
     >>> sitemanager = site.getSiteManager()
     >>> sitemanager
-    <PersistentComponents five>
+    <PersistentComponents ...>
 
 Make sure this site has it's ``__bases__`` configure appropriately.
 

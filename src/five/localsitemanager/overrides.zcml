@@ -2,14 +2,12 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
-  <configure package="Products.Five.component">
-    <browser:page
-        for="OFS.interfaces.IObjectManager"
-        name="components.html"
-        class="five.localsitemanager.browser.ObjectManagerSiteView"
-        template="components.pt"
-        permission="five.ManageSite"
-        />
-  </configure>
+  <browser:page
+      for="OFS.interfaces.IObjectManager"
+      name="components.html"
+      class=".browser.ObjectManagerSiteView"
+      template="components.pt"
+      permission="five.ManageSite"
+      />
 
 </configure>

@@ -1,10 +1,12 @@
-from Acquisition import aq_parent, aq_base
+from Acquisition import aq_parent, aq_inner
+from zope import interface
 from zope.component.globalregistry import base
 from zope.traversing.interfaces import IContainmentRoot
 from zope.app.component.interfaces import ISite
 from zope.component.persistentregistry import PersistentComponents
+from five.localsitemanager import interfaces
 from Products.Five.component.interfaces import IObjectManagerSite
-from Products.Five.component import enableSite
+from Products.Five.component import enableSite, disableSite
 
 def make_site(obj, iface=ISite):
     """Give the specified object required qualities to identify it as a proper
@@ -15,9 +17,18 @@ def make_site(obj, iface=ISite):
     if ISite.providedBy(obj):
         raise ValueError('This is already a site')
     
+    next = find_next_sitemanager(obj)
+    if next is None:
+        next = base
+
     enableSite(obj, iface=iface)
-    
-    components = PersistentComponents(name='five', bases=(base,))
+
+    name = 'five'
+    path = getattr(obj, 'getPhysicalPath', None)
+    if path is not None and callable(path):
+        name = '/'.join(path())
+
+    components = PersistentComponents(name=name, bases=(next,))
     obj.setSiteManager(components)
 
 def make_objectmanager_site(obj):
@@ -44,7 +55,7 @@ def get_parent(obj):
     if parent is not None:
         return parent
 
-    parent = aq_parent(obj)
+    parent = aq_parent(aq_inner(obj))
     if parent is not None:
         return parent
 
@@ -65,6 +76,8 @@ def find_next_sitemanager(site):
 
         try:
             container = get_parent(container)
+            if container is None:
+                return None
         except TypeError:
             # there was not enough context; probably run from a test
             return None

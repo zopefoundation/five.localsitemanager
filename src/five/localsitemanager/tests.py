@@ -5,7 +5,9 @@ from Testing.ZopeTestCase import FunctionalDocFileSuite
 def test_suite():
     return unittest.TestSuite([
         ZopeDocFileSuite('localsitemanager.txt',
-                         package="five.localsitemanager")
+                         package="five.localsitemanager"),
+        FunctionalDocFileSuite('browser.txt',
+                               package="five.localsitemanager")
         ])
 
 if __name__ == '__main__':

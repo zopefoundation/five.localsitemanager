@@ -1,6 +1,5 @@
 from zope.component.globalregistry import base
 from five.localsitemanager import make_objectmanager_site
-from five.localsitemanager import interfaces
 
 from Products.Five.component.browser import ObjectManagerSiteView
 

@@ -1,0 +1,89 @@
+Local Site Manager
+==================
+
+We start from an empty folder.  Since ``OFS.Folder``'s extend
+``ObjectSiteManager`` they all get to be ``IPossibleSite``'s.
+
+    >>> from OFS.Folder import Folder
+    >>> site = Folder('site')
+
+Of course we now need to transform that IPossibleSite into a real ISite.
+
+    >>> import zope.component
+    >>> from zope.app.component.hooks import setSite as setActiveSite
+
+    >>> from five.localsitemanager.browser import ObjectManagerSiteView
+    >>> siteconfig = ObjectManagerSiteView(site, None)
+    >>> siteconfig.makeSite()
+    >>> sitemanager = site.getSiteManager()
+    >>> sitemanager
+    <FivePersistentComponents ...>
+
+Utilities
+---------
+
+Utilities can now be registered with our site manager.  We can confirm this
+by setting up a test utility.
+
+    >>> from OFS.SimpleItem import SimpleItem
+    >>> from zope import interface
+
+    >>> class ITestUtility(interface.Interface):
+    ...     def helloworld(): pass
+
+    >>> class TestUtility(SimpleItem):
+    ...     interface.implements(ITestUtility)
+    ...     def helloworld(self):
+    ...         print 'Hello World'
+
+    >>> sitemanager.registerUtility(TestUtility('test'),
+    ...                             name=u'hello_world',
+    ...                             provided=ITestUtility)
+    >>> sitemanager.getUtility(ITestUtility, name=u'hello_world')
+    <TestUtility ...>
+
+Make sure the utility lookup only works when the correct active site has
+been configured.
+
+    >>> setActiveSite(None)
+    >>> zope.component.queryUtility(ITestUtility, name=u'hello_world') is None
+    True
+
+    >>> setActiveSite(site)
+    >>> zope.component.queryUtility(ITestUtility, name=u'hello_world')
+    <TestUtility ...>
+
+Adapters
+---------
+
+Adapters can now be registered with our site manager.  We can confirm this
+by setting up a test adapter.
+
+    >>> from OFS.SimpleItem import SimpleItem
+    >>> from zope import interface
+
+    >>> class IFoo(interface.Interface): pass
+    >>> class Foo(object): interface.implements(IFoo)
+
+    >>> class ITestAdapter(interface.Interface): pass
+    >>> class TestAdapter(SimpleItem): interface.implements(ITestAdapter)
+
+
+    >>> sitemanager.registerAdapter(TestAdapter,
+    ...                             required=(IFoo,),
+    ...                             provided=ITestAdapter)
+    >>> sitemanager.getAdapter(Foo(), ITestAdapter)
+    <TestAdapter ...>
+
+Make sure the adapter lookup only works when the correct active site has
+been configured.
+
+    >>> setActiveSite(None)
+    >>> zope.component.queryAdapter(Foo(), ITestAdapter) is None
+    True
+
+    >>> setActiveSite(site)
+    >>> zope.component.queryAdapter(Foo(), ITestAdapter)
+    <TestAdapter ...>
+    >>> ITestAdapter(Foo())
+    <TestAdapter ...>

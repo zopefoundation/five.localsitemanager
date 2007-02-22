@@ -1,0 +1,7 @@
+CHANGES
+=======
+
+five.localsitemanager 0.1 (unreleased)
+--------------------------------------
+
+Initial version

@@ -1,0 +1,43 @@
+Installing This Package
+=======================
+
+Prerequisites
+-------------
+
+* Zope 2.10.x
+
+* setuptools_
+
+
+Installation
+------------
+
+Place the ``five`` top-level package into your instance's
+``lib/python`` directory.  You can also install it as an egg using
+easy_install_, for example into your instance by turning it into a
+workingenv_.
+
+
+Configuration
+-------------
+
+Place a ``five.localsitemanager-configure.zcml`` file into your instance's
+``etc/package-includes`` directory with the following contents::
+
+  <include package="five.localsitemanager" />
+
+Alternatively, you can also add this line to the bottom of
+``etc/site.zcml``.
+
+
+Running the Tests
+-----------------
+
+Use the following command to run this package's tests:
+
+  $ bin/zopectl test -s five.localsitemanager
+
+
+.. _workingenv: http://cheeseshop.python.org/pypi/workingenv.py
+.. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
+.. _setuptools: http://peak.telecommunity.com/DevCenter/setuptools

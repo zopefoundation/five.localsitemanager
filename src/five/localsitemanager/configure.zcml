@@ -3,7 +3,7 @@
     xmlns:browser="http://namespaces.zope.org/browser">
 
   <subscriber
-      for="zope.app.component.interfaces.ISite
+      for="Products.Five.component.interfaces.IObjectManagerSite
            zope.app.container.interfaces.IObjectMovedEvent"
       handler=".update_sitemanager_bases_handler"
       />

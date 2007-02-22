@@ -3,7 +3,7 @@ from zope import interface
 from zope.component.globalregistry import base
 from zope.traversing.interfaces import IContainmentRoot
 from zope.app.component.interfaces import ISite
-from zope.component.persistentregistry import PersistentComponents
+from five.localsitemanager.registry import PersistentComponents
 from five.localsitemanager import interfaces
 from Products.Five.component.interfaces import IObjectManagerSite
 from Products.Five.component import enableSite, disableSite

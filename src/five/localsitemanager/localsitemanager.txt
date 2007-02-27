@@ -107,28 +107,74 @@ Now to mix a little required Zope 2 confusion into everything, we must ensure
 that the aq chain is predictable.  And based on consensus we decided that
 the acquired parent of a returned utility should be the ``ISite`` that
 owns the ``ISiteManager`` that returned the utility.  We need to ensure
-all the ways of getting a utility have been covered.
+all the ways of getting a utility have been covered.  Of course this should
+only happen if the utility is acquisition aware to beging with.
 
     >>> import Acquisition
+    >>> from Acquisition.interfaces import IAcquirer
 
+First off, our utility isn't aq-wrapped so asking it what is aq_parent is
+should return None.
+ 
     >>> comp = sitemanager.queryUtility(ITestUtility, name=u'hello_world')
+    >>> Acquisition.aq_parent(comp) is None
+    True
+
+So now we setup a utility that is aq aware.
+
+    >>> class AQTestUtility(Acquisition.Explicit, TestUtility): pass
+    >>> sitemanager.registerUtility(AQTestUtility('test'),
+    ...                             name=u'aq_wrapped',
+    ...                             provided=ITestUtility)
+
+And of course the aq parents should be the site now.
+
+    >>> comp = sitemanager.getUtility(ITestUtility, name=u'aq_wrapped')
     >>> Acquisition.aq_parent(comp) is site
     True
 
-    >>> comp = sitemanager.getUtility(ITestUtility, name=u'hello_world')
-    >>> Acquisition.aq_parent(comp) is site
-    True
+And just to mix things up a bit.  Getting back multiple utilities should
+allow us to test both aq and non-aq based components.
+
+We start with getUtilitiesFor():
 
     >>> utils = [x for x in sitemanager.getUtilitiesFor(ITestUtility)]
     >>> len(utils)
+    2
+
+    >>> nonaqutils = [(name, comp)
+    ...               for name, comp in utils if not IAcquirer.providedBy(comp)]
+    >>> len(nonaqutils)
     1
-    >>> name, comp = utils[0]
+    >>> name, comp = nonaqutils[0]
+    >>> Acquisition.aq_parent(comp) is None
+    True
+
+    >>> aqutils = [(name, comp)
+    ...            for name, comp in utils if IAcquirer.providedBy(comp)]
+    >>> len(aqutils)
+    1
+    >>> name, comp = aqutils[0]
     >>> Acquisition.aq_parent(comp) is site
     True
 
+And then getAllUtilitiesRegisteredFor():
+
     >>> utils = [x for x in sitemanager.getAllUtilitiesRegisteredFor(ITestUtility)]
     >>> len(utils)
+    2
+
+    >>> nonaqutils = [comp for comp in utils if not IAcquirer.providedBy(comp)]
+    >>> len(nonaqutils)
     1
+    >>> comp = nonaqutils[0]
+    >>> Acquisition.aq_parent(comp) is None
+    True
+
+    >>> aqutils = [comp for comp in utils if IAcquirer.providedBy(comp)]
+    >>> len(aqutils)
+    1
+    >>> comp = aqutils[0]
     >>> Acquisition.aq_parent(comp) is site
     True
 

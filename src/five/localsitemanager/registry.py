@@ -14,15 +14,29 @@ class PersistentComponents \
     """
 
     def _wrap(self, comp):
-        """Return an aq wrapped component with the site as the parent.
+        """Return an aq wrapped component with the site as the parent but
+        only if the comp has an aq wrapper to begin with.
         """
-        parent = Acquisition.aq_parent(self)
-        if parent is None:
-            raise ValueError('Not enough context to acquire parent')
 
-        base = Acquisition.aq_base(comp)
+        # BBB: The primary reason for doing this sort of wrapping of
+        # returned utilities is to support CMF tool-like functionality where
+        # a tool expects it's aq_parent to be the portal object.  New code
+        # (ie new utilities) should not rely on this predictability to
+        # get the portal object and should search out an alternate means
+        # (possibly retrieve the ISiteRoot utility).  Although in most
+        # cases getting at the portal object shouldn't be the required pattern
+        # but instead looking up required functionality via other (possibly
+        # local) components.
 
-        return Acquisition.ImplicitAcquisitionWrapper(base, parent)
+        if Acquisition.interfaces.IAcquirer.providedBy(comp):
+            parent = Acquisition.aq_parent(self)
+            if parent is None:
+                raise ValueError('Not enough context to acquire parent')
+
+            base = Acquisition.aq_base(comp)
+            comp = base.__of__(parent)
+
+        return comp
 
     def queryUtility(self, provided, name=u'', default=None):
         comp = self.utilities.lookup((), provided, name, default)

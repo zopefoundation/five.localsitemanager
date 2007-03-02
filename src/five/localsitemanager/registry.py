@@ -1,4 +1,5 @@
 import Acquisition
+from zope.component.interfaces import ComponentLookupError
 import zope.component.persistentregistry
 import OFS.ObjectManager
 
@@ -47,7 +48,7 @@ class PersistentComponents \
     def getUtility(self, provided, name=u''):
         utility = self.queryUtility(provided, name, _marker)
         if utility is _marker:
-            raise interfaces.ComponentLookupError(provided, name)
+            raise ComponentLookupError(provided, name)
         return utility
 
     def getUtilitiesFor(self, interface):

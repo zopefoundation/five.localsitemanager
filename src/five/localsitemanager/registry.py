@@ -35,7 +35,16 @@ class PersistentComponents \
                 raise ValueError('Not enough context to acquire parent')
 
             base = Acquisition.aq_base(comp)
-            comp = base.__of__(parent)
+
+            if base is not Acquisition.aq_base(parent):
+                # If the component is not the cmoponent registry container,
+                # wrap it in the parent
+                comp = base.__of__(parent)
+            else:
+                # If the component happens to be the component registry
+                # container we are looking up a ISiteRoot.
+                # We are not wrapping it in itself but in its own parent
+                comp = base.__of__(Acquisition.aq_parent(parent))
 
         return comp
 

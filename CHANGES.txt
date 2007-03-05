@@ -1,7 +1,14 @@
+=======
 CHANGES
 =======
 
-five.localsitemanager 0.1 (unreleased)
---------------------------------------
+five.localsitemanager 0.1.1 (unreleased)
+========================================
+
+* Fixed aq wrapping when looking up a utility that is actually the component
+  registry's parent (the ISite).
+
+five.localsitemanager 0.1 (2007-02-27)
+======================================
 
 Initial version

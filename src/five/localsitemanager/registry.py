@@ -1,18 +1,19 @@
 import Acquisition
 from zope.component.interfaces import ComponentLookupError
 import zope.component.persistentregistry
+import zope.interface.adapter
 import OFS.ObjectManager
 
 _marker = object()
 
-class PersistentComponents \
-          (zope.component.persistentregistry.PersistentComponents,
-           OFS.ObjectManager.ObjectManager):
-    """An implementation of a component registry that can be persisted
-    and looks like a standard ObjectManager.  It also ensures that all
-    utilities have the the parent of this site manager (which should be
-    the ISite) as their acquired parent.
+class AqAwareAdapterLookup(zope.interface.adapter.VerifyingAdapterLookup):
+    """A lookup that is identical to VerifyingAdapterLookup except that
+    it returns updated aq-wrapped components.
     """
+
+    def lookup(self, *args, **kwargs):
+        comp = super(AqAwareAdapterLookup, self).lookup(*args, **kwargs)
+        return self._wrap(comp)
 
     def _wrap(self, comp):
         """Return an aq wrapped component with the site as the parent but
@@ -30,7 +31,8 @@ class PersistentComponents \
         # local) components.
 
         if Acquisition.interfaces.IAcquirer.providedBy(comp):
-            parent = Acquisition.aq_parent(self)
+            compregistry = self._registry._compregistry
+            parent = Acquisition.aq_parent(compregistry)
             if parent is None:
                 raise ValueError('Not enough context to acquire parent')
 
@@ -48,22 +50,31 @@ class PersistentComponents \
 
         return comp
 
-    def queryUtility(self, provided, name=u'', default=None):
-        comp = self.utilities.lookup((), provided, name, default)
-        if comp is not default:
-            comp = self._wrap(comp)
-        return comp
+class PersistentAdapterRegistry \
+          (zope.component.persistentregistry.PersistentAdapterRegistry):
+    """An adapter registry that uses a lookup delegate that is aq-aware.
+    """
 
-    def getUtility(self, provided, name=u''):
-        utility = self.queryUtility(provided, name, _marker)
-        if utility is _marker:
-            raise ComponentLookupError(provided, name)
-        return utility
+    LookupClass = AqAwareAdapterLookup
 
-    def getUtilitiesFor(self, interface):
-        return ((name, self._wrap(utility))
-                for name, utility in self.utilities.lookupAll((), interface))
+    def __init__(self, compregistry):
+        super(PersistentAdapterRegistry, self).__init__()
+        self._compregistry  = compregistry
 
-    def getAllUtilitiesRegisteredFor(self, interface):
-        return (self._wrap(x)
-                for x in self.utilities.subscriptions((), interface))
+class PersistentComponents \
+          (zope.component.persistentregistry.PersistentComponents,
+           OFS.ObjectManager.ObjectManager):
+    """An implementation of a component registry that can be persisted
+    and looks like a standard ObjectManager.  It also ensures that all
+    utilities have the the parent of this site manager (which should be
+    the ISite) as their acquired parent.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(PersistentComponents, self).__init__(*args, **kwargs)
+
+    def _init_registries(self):
+        self.adapters = zope.component.persistentregistry.\
+                        PersistentAdapterRegistry()
+        # get our aq aware registry
+        self.utilities = PersistentAdapterRegistry(self)

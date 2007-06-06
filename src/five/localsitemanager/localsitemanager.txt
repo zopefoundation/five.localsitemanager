@@ -108,7 +108,7 @@ that the aq chain is predictable.  And based on consensus we decided that
 the acquired parent of a returned utility should be the ``ISite`` that
 owns the ``ISiteManager`` that returned the utility.  We need to ensure
 all the ways of getting a utility have been covered.  Of course this should
-only happen if the utility is acquisition aware to beging with.
+only happen if the utility is acquisition aware to begin with.
 
     >>> import Acquisition
     >>> from Acquisition.interfaces import IAcquirer

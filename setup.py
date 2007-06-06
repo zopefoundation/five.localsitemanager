@@ -39,5 +39,5 @@ that do not conflict with Zope 3 have been made to easy the path with CMF.
       install_requires=[
         'setuptools',
       ],
-      zip_safe = True,
+      zip_safe = False,
       )

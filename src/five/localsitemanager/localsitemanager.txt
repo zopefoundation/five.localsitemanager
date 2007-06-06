@@ -11,6 +11,7 @@ Of course we now need to transform that IPossibleSite into a real ISite.
 
     >>> import zope.component
     >>> from zope.app.component.hooks import setSite as setActiveSite
+    >>> from zope.app.component.hooks import clearSite
 
     >>> from five.localsitemanager import make_objectmanager_site
     >>> make_objectmanager_site(site)
@@ -291,4 +292,59 @@ registered for:
 
     >>> util1_1.aq_chain
     [<Utility AQTestUtility "util1_1">, <Folder at folder1/folder1_1>, <Folder at folder1>]
+
+
+Acquisition Context of Global Utilities
+---------------------------------------
+
+    >>> from zope.component import getGlobalSiteManager
+
+Register a utility with both of the nested site managers:
+
+    >>> gsm = getGlobalSiteManager()
+    >>> gsm.registerUtility(AQTestUtility('globalutil1'),
+    ...                     name=u'globalutil1',
+    ...                     provided=ITestUtility)
+
+    >>> sm1 = folder1.getSiteManager()
+    >>> sm1.registerUtility(AQTestUtility('localutil1'),
+    ...                     name=u'localutil1',
+    ...                     provided=ITestUtility)
+
+Lookup both utilities in the context of the global site manager:
+
+    >>> clearSite()
+    >>> globalutil1 = queryUtility(ITestUtility, name=u'globalutil1')
+    >>> globalutil1
+    <Utility AQTestUtility "globalutil1">
+
+    >>> getattr(globalutil1, 'aq_chain', None) is None
+    True
+
+The local utility isn't available in the global site manager:
+
+    >>> queryUtility(ITestUtility, name=u'localutil1') is None
+    True
+
+Lookup both utilities in the context of the local site manager:
+
+    >>> setActiveSite(folder1)
+    >>> globalutil1 = queryUtility(ITestUtility, name=u'globalutil1')
+    >>> globalutil1
+    <Utility AQTestUtility "globalutil1">
+
+We don't expect the global utility to get any Acquisition context:
+
+    >>> getattr(globalutil1, 'aq_chain', None) is None
+    True
+
+For the local utility we expect to get wrapped in the context of the local
+site manager:
+
+    >>> localutil1 = queryUtility(ITestUtility, name=u'localutil1')
+    >>> localutil1
+    <Utility AQTestUtility "localutil1">
+
+    >>> localutil1.aq_chain
+    [<Utility AQTestUtility "localutil1">, <Folder at folder1>]
 

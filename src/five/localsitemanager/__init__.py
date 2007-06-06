@@ -1,11 +1,11 @@
-from Acquisition import aq_parent, aq_inner
-from zope import interface
+from Acquisition import aq_base
 from zope.component.globalregistry import base
 from zope.traversing.interfaces import IContainmentRoot
 from zope.app.component.interfaces import ISite
 from five.localsitemanager.registry import PersistentComponents
+from five.localsitemanager.utils import get_parent
 from Products.Five.component.interfaces import IObjectManagerSite
-from Products.Five.component import enableSite, disableSite
+from Products.Five.component import enableSite
 
 def make_site(obj, iface=ISite):
     """Give the specified object required qualities to identify it as a proper
@@ -29,6 +29,7 @@ def make_site(obj, iface=ISite):
 
     components = PersistentComponents(name=name, bases=(next,))
     obj.setSiteManager(components)
+    components.__parent__ = aq_base(obj)
 
 def make_objectmanager_site(obj):
     """Just a bit of sugar coating to make an unnofficial objectmanager
@@ -36,29 +37,6 @@ def make_objectmanager_site(obj):
     """
     
     make_site(obj, IObjectManagerSite)
-
-def get_parent(obj):
-    """Returns the container the object was traversed via.  This
-    is a version of zope.traversing.api.getParent that is designed to
-    handle acquisition as well.
-
-    Returns None if the object is a containment root.
-    Raises TypeError if the object doesn't have enough context to get the
-    parent.
-    """
-    
-    if IContainmentRoot.providedBy(obj):
-        return None
-    
-    parent = getattr(obj, '__parent__', None)
-    if parent is not None:
-        return parent
-
-    parent = aq_parent(aq_inner(obj))
-    if parent is not None:
-        return parent
-
-    raise TypeError("Not enough context information to get parent", obj)
 
 
 def find_next_sitemanager(site):

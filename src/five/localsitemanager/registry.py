@@ -1,6 +1,6 @@
 import Acquisition
 from zope.app.component.hooks import getSite
-from zope.component.interfaces import ComponentLookupError
+from zope.app.component.interfaces import ISite
 from zope.component.persistentregistry import PersistentAdapterRegistry
 from zope.component.persistentregistry import PersistentComponents
 from zope.component.registry import UtilityRegistration
@@ -9,6 +9,8 @@ from zope.interface.adapter import _lookup
 from zope.interface.adapter import _lookupAll
 from zope.interface.adapter import _subscriptions
 import OFS.ObjectManager
+
+from five.localsitemanager.utils import get_parent
 
 _marker = object()
 
@@ -87,6 +89,13 @@ class FivePersistentAdapterRegistry(PersistentAdapterRegistry):
 
     LookupClass = FiveVerifyingAdapterLookup
 
+
+def _recurse_to_site(current, wanted):
+    if not Acquisition.aq_base(current) == wanted:
+        current = _recurse_to_site(get_parent(current), wanted)
+    return current
+
+
 def _wrap(comp, registry):
     """Return an aq wrapped component with the site as the parent but
     only if the comp has an aq wrapper to begin with.
@@ -94,7 +103,7 @@ def _wrap(comp, registry):
 
     # BBB: The primary reason for doing this sort of wrapping of
     # returned utilities is to support CMF tool-like functionality where
-    # a tool expects it's aq_parent to be the portal object. New code
+    # a tool expects its aq_parent to be the portal object. New code
     # (ie new utilities) should not rely on this predictability to
     # get the portal object and should search out an alternate means
     # (possibly retrieve the ISiteRoot utility). Although in most
@@ -103,7 +112,18 @@ def _wrap(comp, registry):
     # local) components.
 
     if registry.__bases__ and Acquisition.interfaces.IAcquirer.providedBy(comp):
-        parent = getSite()
+        current_site = getSite()
+        registry_site = Acquisition.aq_base(registry.__parent__)
+        if not ISite.providedBy(registry_site):
+            registry_site = registry_site.__parent__
+
+        parent = None
+
+        if current_site == registry_site:
+            parent = current_site
+        else:
+            parent = _recurse_to_site(current_site, registry_site)
+
         if parent is None:
             raise ValueError('Not enough context to acquire parent')
 
@@ -133,6 +153,7 @@ class PersistentComponents \
     def _init_registries(self):
         self.adapters = PersistentAdapterRegistry()
         self.utilities = FivePersistentAdapterRegistry()
+        self.utilities.__parent__ = self
 
     def registeredUtilities(self):
         for ((provided, name), (component, info)

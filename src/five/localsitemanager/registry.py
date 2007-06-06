@@ -93,10 +93,10 @@ def _wrap(comp, registry):
 
     # BBB: The primary reason for doing this sort of wrapping of
     # returned utilities is to support CMF tool-like functionality where
-    # a tool expects it's aq_parent to be the portal object.  New code
+    # a tool expects it's aq_parent to be the portal object. New code
     # (ie new utilities) should not rely on this predictability to
     # get the portal object and should search out an alternate means
-    # (possibly retrieve the ISiteRoot utility).  Although in most
+    # (possibly retrieve the ISiteRoot utility). Although in most
     # cases getting at the portal object shouldn't be the required pattern
     # but instead looking up required functionality via other (possibly
     # local) components.
@@ -109,7 +109,7 @@ def _wrap(comp, registry):
         base = Acquisition.aq_base(comp)
 
         if base is not Acquisition.aq_base(parent):
-            # If the component is not the cmoponent registry container,
+            # If the component is not the component registry container,
             # wrap it in the parent
             comp = base.__of__(parent)
         else:

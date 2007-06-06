@@ -117,6 +117,12 @@ def _wrap(comp, registry):
         if not ISite.providedBy(registry_site):
             registry_site = registry_site.__parent__
 
+        if current_site is None:
+            # If no current site can be found, return utilities wrapped in
+            # the site they where registered in. We loose the whole aq chain
+            # here though
+            current_site = Acquisition.aq_base(registry_site)
+
         parent = None
 
         if current_site == registry_site:

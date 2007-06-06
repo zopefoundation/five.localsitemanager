@@ -101,7 +101,7 @@ def _wrap(comp, registry):
     # but instead looking up required functionality via other (possibly
     # local) components.
 
-    if Acquisition.interfaces.IAcquirer.providedBy(comp):
+    if registry.__bases__ and Acquisition.interfaces.IAcquirer.providedBy(comp):
         parent = getSite()
         if parent is None:
             raise ValueError('Not enough context to acquire parent')

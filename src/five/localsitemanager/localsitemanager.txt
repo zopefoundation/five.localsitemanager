@@ -235,3 +235,60 @@ Now we make sure that that the ``__bases__`` have been setup appropriately.
 
     >>> folder1_1.getSiteManager().__bases__
     (<PersistentComponents ...>,)
+
+
+Acquisition Context with Nested Sites
+-------------------------------------
+
+    >>> from zope.component import queryUtility
+
+Register a utility with both of the nested site managers:
+
+    >>> sm1 = folder1.getSiteManager()
+    >>> sm1.registerUtility(AQTestUtility('util1'),
+    ...                     name=u'util1',
+    ...                     provided=ITestUtility)
+
+    >>> sm1_1 = folder1_1.getSiteManager()
+    >>> sm1_1.registerUtility(AQTestUtility('util1_1'),
+    ...                           name=u'util1_1',
+    ...                           provided=ITestUtility)
+
+    >>> folder1_1.getSiteManager().__bases__
+    (<PersistentComponents ...>,)
+
+Lookup both utilities in the context of the first site manager:
+
+    >>> setActiveSite(folder1)
+    >>> util1 = queryUtility(ITestUtility, name=u'util1')
+    >>> util1
+    <Utility AQTestUtility "util1">
+
+    >>> util1.aq_chain
+    [<Utility AQTestUtility "util1">, <Folder at folder1>]
+
+The second utility isn't available in the first site manager:
+
+    >>> queryUtility(ITestUtility, name=u'util_1') is None
+    True
+
+Lookup both utilities in the context of the second site manager:
+
+    >>> setActiveSite(folder1_1)
+    >>> util1 = queryUtility(ITestUtility, name=u'util1')
+    >>> util1
+    <Utility AQTestUtility "util1">
+
+We expect to get wrapped in the context of the site manager the utility is
+registered for:
+
+    >>> util1.aq_chain
+    [<Utility AQTestUtility "util1">, <Folder at folder1>]
+
+    >>> util1_1 = queryUtility(ITestUtility, name=u'util1_1')
+    >>> util1_1
+    <Utility AQTestUtility "util1_1">
+
+    >>> util1_1.aq_chain
+    [<Utility AQTestUtility "util1_1">, <Folder at folder1/folder1_1>, <Folder at folder1>]
+

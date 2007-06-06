@@ -36,6 +36,8 @@ that do not conflict with Zope 3 have been made to easy the path with CMF.
       package_dir = {'': 'src'},
       namespace_packages=['five',],
       include_package_data = True,
-
+      install_requires=[
+        'setuptools',
+      ],
       zip_safe = True,
       )

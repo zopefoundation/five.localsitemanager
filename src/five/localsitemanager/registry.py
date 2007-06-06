@@ -72,8 +72,10 @@ class FiveVerifyingAdapterLookup(VerifyingAdapterLookup):
                 if extendors is None:
                     continue
 
+            tmp_result = []
             _subscriptions(byorder[order], required, extendors, u'',
                            result, 0, order)
+            result = [ _wrap(r, registry) for r in result ]
 
         self._subscribe(*required)
 

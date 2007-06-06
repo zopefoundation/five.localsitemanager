@@ -179,6 +179,26 @@ And then getAllUtilitiesRegisteredFor():
     >>> Acquisition.aq_parent(comp) is site
     True
 
+And registeredUtilities():
+
+    >>> utils = [ r.component for r in sitemanager.registeredUtilities() ]
+    >>> len(utils)
+    2
+
+    >>> nonaqutils = [comp for comp in utils if not IAcquirer.providedBy(comp)]
+    >>> len(nonaqutils)
+    1
+    >>> comp = nonaqutils[0]
+    >>> Acquisition.aq_parent(comp) is None
+    True
+
+    >>> aqutils = [comp for comp in utils if IAcquirer.providedBy(comp)]
+    >>> len(aqutils)
+    1
+    >>> comp = aqutils[0]
+    >>> Acquisition.aq_parent(comp) is site
+    True
+
 Nested Sites
 ------------
 

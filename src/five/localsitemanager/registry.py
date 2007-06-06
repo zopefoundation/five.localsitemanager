@@ -3,6 +3,7 @@ from zope.app.component.hooks import getSite
 from zope.component.interfaces import ComponentLookupError
 from zope.component.persistentregistry import PersistentAdapterRegistry
 from zope.component.persistentregistry import PersistentComponents
+from zope.component.registry import UtilityRegistration
 from zope.interface.adapter import VerifyingAdapterLookup
 from zope.interface.adapter import _lookup
 from zope.interface.adapter import _lookupAll
@@ -132,3 +133,9 @@ class PersistentComponents \
     def _init_registries(self):
         self.adapters = PersistentAdapterRegistry()
         self.utilities = FivePersistentAdapterRegistry()
+
+    def registeredUtilities(self):
+        for ((provided, name), (component, info)
+             ) in self._utility_registrations.iteritems():
+            yield UtilityRegistration(self, provided, name,
+                                      _wrap(component, self), info)

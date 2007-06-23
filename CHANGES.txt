@@ -5,6 +5,12 @@ CHANGES
 five.localsitemanager 0.1.1 (unreleased)
 ========================================
 
+* Refactored and fixed aq wrapping: Nested site managers now return utilities
+  wrapped in the right context. RequestContainers are removed and wrapped
+  utilities are cached. This requires a special LookupClass called
+  'FiveVerifyingAdapterLookup' in all 'utilities' registries used below a
+  five.localsitemanager site.
+
 * Fixed aq wrapping when looking up a utility that is actually the component
   registry's parent (the ISite).
 

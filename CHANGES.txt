@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-five.localsitemanager 0.1.1 (unreleased)
+five.localsitemanager 0.1.3 (unreleased)
 ========================================
 
 * Refactored and fixed aq wrapping: Nested site managers now return utilities
@@ -10,6 +10,14 @@ five.localsitemanager 0.1.1 (unreleased)
   utilities are cached. This requires a special LookupClass called
   'FiveVerifyingAdapterLookup' in all 'utilities' registries used below a
   five.localsitemanager site.
+
+five.localsitemanager 0.1.2 (2007-06-23)
+========================================
+
+* Corrected the zip-safe flag to be False.
+
+five.localsitemanager 0.1.1 (2007-03-05)
+========================================
 
 * Fixed aq wrapping when looking up a utility that is actually the component
   registry's parent (the ISite).

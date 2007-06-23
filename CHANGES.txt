@@ -2,7 +2,12 @@
 CHANGES
 =======
 
-five.localsitemanager 0.1.1 (unreleased)
+five.localsitemanager 0.1.2 (2007-06-23)
+========================================
+
+* Corrected the zip-safe flag to be False.
+
+five.localsitemanager 0.1.1 (2007-03-05)
 ========================================
 
 * Fixed aq wrapping when looking up a utility that is actually the component

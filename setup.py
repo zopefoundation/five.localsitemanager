@@ -5,7 +5,7 @@ $Id$
 import os
 from setuptools import setup, Extension
 
-version = '0.1.1'
+version = '0.1.2'
 
 setup(name='five.localsitemanager',
       version=version,
@@ -36,6 +36,5 @@ that do not conflict with Zope 3 have been made to easy the path with CMF.
       package_dir = {'': 'src'},
       namespace_packages=['five',],
       include_package_data = True,
-
-      zip_safe = True,
+      zip_safe = False,
       )

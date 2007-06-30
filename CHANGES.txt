@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-five.localsitemanager 0.1.3 (unreleased)
+five.localsitemanager 0.2.0 (2007-06-30)
 ========================================
 
 * Refactored and fixed aq wrapping: Nested site managers now return utilities

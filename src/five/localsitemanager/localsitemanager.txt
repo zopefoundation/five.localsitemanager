@@ -1,7 +1,7 @@
 Local Site Manager
 ==================
 
-We start from an empty folder.  Since ``OFS.Folder``'s extend
+We start from an empty folder. Since ``OFS.Folder``'s extend
 ``ObjectSiteManager`` they all get to be ``IPossibleSite``'s.
 
     >>> from OFS.Folder import Folder
@@ -27,8 +27,8 @@ Make sure this site has it's ``__bases__`` configure appropriately.
 Utilities
 ---------
 
-Utilities can now be registered with our site manager.  We can confirm this
-by setting up a test utility.
+Utilities can now be registered with our site manager. We can confirm this by
+setting up a test utility.
 
     >>> from OFS.SimpleItem import SimpleItem
     >>> from zope import interface
@@ -61,8 +61,8 @@ been configured.
 Adapters
 ---------
 
-Adapters can now be registered with our site manager.  We can confirm this
-by setting up a test adapter.
+Adapters can now be registered with our site manager. We can confirm this by
+setting up a test adapter.
 
     >>> from OFS.SimpleItem import SimpleItem
     >>> from zope import interface
@@ -105,37 +105,37 @@ Acquisition
 -----------
 
 Now to mix a little required Zope 2 confusion into everything, we must ensure
-that the aq chain is predictable.  And based on consensus we decided that
-the acquired parent of a returned utility should be the ``ISite`` that
-owns the ``ISiteManager`` that returned the utility.  We need to ensure
-all the ways of getting a utility have been covered.  Of course this should
-only happen if the utility is acquisition aware to begin with.
+that the aq chain is predictable. And based on consensus we decided that the
+acquired parent of a returned utility should be the ``ISite`` that owns the
+``ISiteManager`` that returned the utility. We need to ensure all the ways of
+getting a utility have been covered. Of course this should only happen if the
+utility is acquisition aware to begin with.
 
     >>> import Acquisition
     >>> from Acquisition.interfaces import IAcquirer
 
 First off, our utility isn't aq-wrapped so asking it what is aq_parent is
 should return None.
- 
+
     >>> comp = sitemanager.queryUtility(ITestUtility, name=u'hello_world')
     >>> Acquisition.aq_parent(comp) is None
     True
 
-So now we setup a utility that is aq aware.
+So now we setup a utility that is aq-aware.
 
     >>> class AQTestUtility(Acquisition.Explicit, TestUtility): pass
     >>> sitemanager.registerUtility(AQTestUtility('test'),
     ...                             name=u'aq_wrapped',
     ...                             provided=ITestUtility)
 
-And of course the aq parents should be the site now.
+And of course the aq parent should be the site now.
 
     >>> comp = sitemanager.getUtility(ITestUtility, name=u'aq_wrapped')
     >>> Acquisition.aq_parent(comp) is site
     True
 
-And just to mix things up a bit.  Getting back multiple utilities should
-allow us to test both aq and non-aq based components.
+And just to mix things up a bit. Getting back multiple utilities should allow
+us to test both aq and non-aq based components.
 
 We start with getUtilitiesFor():
 
@@ -161,7 +161,8 @@ We start with getUtilitiesFor():
 
 And then getAllUtilitiesRegisteredFor():
 
-    >>> utils = [x for x in sitemanager.getAllUtilitiesRegisteredFor(ITestUtility)]
+    >>> utils = [x for x in
+    ...          sitemanager.getAllUtilitiesRegisteredFor(ITestUtility)]
     >>> len(utils)
     2
 
@@ -203,12 +204,12 @@ Nested Sites
 ------------
 
 Whenever a component is queried using the component registry, the active
-component registry (ie site manager) needs to be smart enough to check
-all *parent* component registries as well.
+component registry (ie site manager) needs to be smart enough to check all
+*parent* component registries as well.
 
-Implementation-wise this means that each component registry needs to have
-an appropriate ``__bases__`` attribute configured that is aware of
-containment and (in the case of Zope 2) acquisition to some respect.
+Implementation-wise this means that each component registry needs to have an
+appropriate ``__bases__`` attribute configured that is aware of containment
+and (in the case of Zope 2) acquisition to some respect.
 
 Start by creating some nested sites.
 
@@ -301,7 +302,7 @@ Lookup both utilities in the context of the second site manager:
     <Utility AQTestUtility "util1">
 
 We expect to get wrapped in the context of the site manager the utility is
-registered for:
+registered with:
 
     >>> util1.aq_chain
     [<Utility AQTestUtility "util1">, <Folder at folder1>]
@@ -353,7 +354,7 @@ Lookup both utilities in the context of the local site manager:
     >>> globalutil1
     <Utility AQTestUtility "globalutil1">
 
-We don't expect the global utility to get any Acquisition context:
+We expect the global utility to get no Acquisition context:
 
     >>> getattr(globalutil1, 'aq_chain', None) is None
     True
@@ -368,3 +369,9 @@ site manager:
     >>> localutil1.aq_chain
     [<Utility AQTestUtility "localutil1">, <Folder at folder1>]
 
+Clean up
+--------
+
+    >>> from zope.testing.cleanup import cleanUp
+    >>> clearSite()
+    >>> cleanUp()

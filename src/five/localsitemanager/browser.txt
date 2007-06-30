@@ -46,8 +46,8 @@ Make a folder to use as a local site for component registration:
     >>> browser.getControl('Add').click()
     >>> browser.getLink('folder').click()
 
-Look up the ``components.html`` view and make sure the
-``Make Site`` action still works.
+Look up the ``components.html`` view and make sure the ``Make Site`` action
+still works.
 
     >>> browser.open('http://localhost/folder/components.html')
     >>> browser.getControl('Make site').click()

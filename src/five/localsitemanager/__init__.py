@@ -7,12 +7,11 @@ from five.localsitemanager.utils import get_parent
 from Products.Five.component.interfaces import IObjectManagerSite
 from Products.Five.component import enableSite
 
+
 def make_site(obj, iface=ISite):
     """Give the specified object required qualities to identify it as a proper
     ISite.
     """
-    
-    # we intentionally test for ISite and not iface
     if ISite.providedBy(obj):
         raise ValueError('This is already a site')
     
@@ -31,11 +30,11 @@ def make_site(obj, iface=ISite):
     obj.setSiteManager(components)
     components.__parent__ = aq_base(obj)
 
+
 def make_objectmanager_site(obj):
     """Just a bit of sugar coating to make an unnofficial objectmanager
     based site.
     """
-    
     make_site(obj, IObjectManagerSite)
 
 
@@ -43,12 +42,11 @@ def find_next_sitemanager(site):
     """Find the closest sitemanager that is not the specified site's
     sitemanager.
     """
-    
     container = site
     sm = None
     while sm is None:
         if IContainmentRoot.providedBy(container):
-            # we're the root site, return None
+            # We are at the root site, return None
             return None
 
         try:
@@ -56,12 +54,13 @@ def find_next_sitemanager(site):
             if container is None:
                 return None
         except TypeError:
-            # there was not enough context; probably run from a test
+            # There was not enough context; probably run from a test
             return None
 
         if ISite.providedBy(container):
             sm = container.getSiteManager()
     return sm
+
 
 def update_sitemanager_bases(site):
     """Formulate the most appropriate __bases__ value for a site's site manager
@@ -69,12 +68,12 @@ def update_sitemanager_bases(site):
     is.  After this call, the __bases__ is guaranteed to have one and only
     one value in the __bases__ list/tuple.
     """
-    
     next = find_next_sitemanager(site)
     if next is None:
         next = base
     sm = site.getSiteManager()
     sm.__bases__ = (next, )
+
 
 def update_sitemanager_bases_handler(site, event):
     update_sitemanager_bases(site)

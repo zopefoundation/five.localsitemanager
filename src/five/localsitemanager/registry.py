@@ -1,4 +1,5 @@
 import Acquisition
+import ComputedAttribute
 from zope.component.interfaces import ComponentLookupError
 import zope.component.persistentregistry
 import zope.interface.adapter
@@ -6,12 +7,14 @@ import OFS.ObjectManager
 
 _marker = object()
 
-class AqAwareAdapterLookup(zope.interface.adapter.VerifyingAdapterLookup):
+class AqAwareAdapterLookup(Acquisition.Explicit,
+                           zope.interface.adapter.VerifyingAdapterLookup):
     """A lookup that is identical to VerifyingAdapterLookup except that
     it returns updated aq-wrapped components.
     """
 
     def lookup(self, *args, **kwargs):
+        import pdb; pdb.set_trace()
         comp = super(AqAwareAdapterLookup, self).lookup(*args, **kwargs)
         return self._wrap(comp)
 
@@ -51,7 +54,8 @@ class AqAwareAdapterLookup(zope.interface.adapter.VerifyingAdapterLookup):
         return comp
 
 class PersistentAdapterRegistry \
-          (zope.component.persistentregistry.PersistentAdapterRegistry):
+          (Acquisition.Explicit,
+           zope.component.persistentregistry.PersistentAdapterRegistry):
     """An adapter registry that uses a lookup delegate that is aq-aware.
     """
 

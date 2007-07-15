@@ -15,6 +15,7 @@ Of course we now need to transform that IPossibleSite into a real ISite.
     >>> from five.localsitemanager import make_objectmanager_site
     >>> make_objectmanager_site(site)
     >>> sitemanager = site.getSiteManager()
+    >>> import pdb; pdb.set_trace()
     >>> sitemanager
     <PersistentComponents ...>
 

@@ -167,9 +167,10 @@ class PersistentComponents \
 
     def _init_registries(self):
         super(PersistentComponents, self)._init_registries()
-        self.utilities.LookupClass = FiveVerifyingAdapterLookup
-        self.utilities._createLookup()
-        self.utilities.__parent__ = self
+        utilities = Acquisition.aq_base(self.utilities)
+        utilities.LookupClass = FiveVerifyingAdapterLookup
+        utilities._createLookup()
+        utilities.__parent__ = self
 
     def registeredUtilities(self):
         for ((provided, name), (component, info)

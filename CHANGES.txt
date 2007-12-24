@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-five.localsitemanager 0.3 (unreleased)
+five.localsitemanager 0.3 (2007-12-24)
 ======================================
 
 * Fixed potential aq problem when assigning various values to the utilities

@@ -13,6 +13,9 @@ Of course we now need to transform that IPossibleSite into a real ISite.
     >>> from zope.app.component.hooks import setSite as setActiveSite
     >>> from zope.app.component.hooks import clearSite
 
+    >>> from zope.app.component.hooks import setHooks
+    >>> setHooks()
+
     >>> from five.localsitemanager import make_objectmanager_site
     >>> make_objectmanager_site(site)
     >>> sitemanager = site.getSiteManager()

@@ -173,7 +173,7 @@ class PersistentComponents \
         utilities.__parent__ = self
 
     def registeredUtilities(self):
-        for ((provided, name), (component, info)
-             ) in self._utility_registrations.iteritems():
-            yield UtilityRegistration(self, provided, name,
-                                      _wrap(component, self), info)
+        for reg in super(PersistentComponents, self).registeredUtilities():
+            reg.component=_wrap(reg.component, self)
+            yield reg
+

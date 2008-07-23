@@ -2,6 +2,14 @@
 CHANGES
 =======
 
+0.3 - Unreleased
+================
+
+* Rewrite PersistentComponents.registeredUtilities to not use
+  internal methods. This makes it compatible with both zope.component <3.5.0dev
+  and >3.5.0dev.
+
+
 five.localsitemanager 0.3 (2007-12-24)
 ======================================
 

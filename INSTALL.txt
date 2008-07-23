@@ -1,5 +1,5 @@
-Installing This Package
-=======================
+Installation
+============
 
 Prerequisites
 -------------
@@ -42,3 +42,4 @@ Use the following command to run this package's tests:
 .. _workingenv: http://cheeseshop.python.org/pypi/workingenv.py
 .. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
 .. _setuptools: http://peak.telecommunity.com/DevCenter/setuptools
+

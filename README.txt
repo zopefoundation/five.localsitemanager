@@ -1,21 +1,12 @@
-five.localsitemanager
-=====================
+Introduction
+============
 
 Overview
 --------
 
-``five.localsitemanager`` provides a local site manager based on the
-standard Zope 3 local site manager for Zope 2.
-
-Changes
--------
-
-See CHANGES.txt.
-
-Installation
-------------
-
-See INSTALL.txt.
+five.localsitemanager attempts to provide a local site manager implementation
+that is as close to Zope 3's implemenation as possible.  Some reservations
+that do not conflict with Zope 3 have been made to easy the path with CMF.
 
 Developer Resources
 -------------------
@@ -31,3 +22,4 @@ Developer Resources
 - Writable Subversion checkout:
 
   $ svn co svn+ssh://svn.zope.org/repos/main/five.localsitemanager/trunk
+

@@ -2,7 +2,6 @@
 
 $Id$
 """
-import os
 from setuptools import setup, Extension
 
 version = '0.4'
@@ -14,16 +13,12 @@ setup(name='five.localsitemanager',
       description='Local site manager implementation for Zope 2',
       author='Rocky Burt and Contributors',
       author_email='z3-five@codespeak.net',
-      long_description="""\
-five.localsitemanager attempts to provide a local site manager implementation
-that is as close to Zope 3's implemenation as possible.  Some reservations
-that do not conflict with Zope 3 have been made to easy the path with CMF.
-""",
-
+      long_description=open("README.txt").read() + "\n" + 
+                       open("INSTALL.txt").read() + "\n" +
+                       open("CHANGES.txt").read(),
       classifiers=[
           'Environment :: Web Environment',
           'Framework :: Zope2',
-          'Framework :: Zope3',
           'License :: OSI Approved :: Zope Public License',
           'Operating System :: OS Independent',
           'Programming Language :: Python',
@@ -41,3 +36,4 @@ that do not conflict with Zope 3 have been made to easy the path with CMF.
       ],
       zip_safe = False,
       )
+

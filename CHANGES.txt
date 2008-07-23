@@ -1,23 +1,22 @@
-=======
-CHANGES
-=======
+Changelog
+=========
 
 0.3 - Unreleased
-================
+----------------
 
 * Rewrite PersistentComponents.registeredUtilities to not use
   internal methods. This makes it compatible with both zope.component <3.5.0dev
   and >3.5.0dev.
 
 
-five.localsitemanager 0.3 (2007-12-24)
-======================================
+0.3 - 2007-12-24
+----------------
 
 * Fixed potential aq problem when assigning various values to the utilities
   registry of the component registry.
 
-five.localsitemanager 0.2 (2007-06-30)
-======================================
+0.2 - 2007-06-30
+----------------
 
 * Refactored and fixed aq wrapping: Nested site managers now return utilities
   wrapped in the right context. RequestContainers are removed and wrapped
@@ -25,18 +24,22 @@ five.localsitemanager 0.2 (2007-06-30)
   'FiveVerifyingAdapterLookup' in all 'utilities' registries used below a
   five.localsitemanager site.
 
-five.localsitemanager 0.1.2 (2007-06-23)
-========================================
+
+0.1.2 - 2007-06-23
+------------------
 
 * Corrected the zip-safe flag to be False.
 
-five.localsitemanager 0.1.1 (2007-03-05)
-========================================
+
+0.1.1 - 2007-03-05
+------------------
 
 * Fixed aq wrapping when looking up a utility that is actually the component
   registry's parent (the ISite).
 
-five.localsitemanager 0.1 (2007-02-27)
-======================================
 
-Initial version
+0.1 (2007-02-27)
+----------------
+
+* Initial version
+

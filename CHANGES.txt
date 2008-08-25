@@ -4,6 +4,8 @@ Changelog
 0.5 - Unreleased
 ----------------
 
+* Added buildout for project, so testing can be done using ``bin/test``.
+
 0.4 - 2008-07-23
 ----------------
 

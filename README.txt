@@ -15,11 +15,4 @@ Developer Resources
 
   http://svn.zope.org/five.localsitemanager
 
-- Read-only Subversion checkout:
-
-  $ svn co svn://svn.zope.org/repos/main/five.localsitemanager/trunk
-
-- Writable Subversion checkout:
-
-  $ svn co svn+ssh://svn.zope.org/repos/main/five.localsitemanager/trunk
 

@@ -265,16 +265,21 @@ When we query the utility, it is returned with its original context:
     >>> zope.component.getUtility(ITestUtility, name='with_aq_chain')
     <SITestUtility at /a/b/si_util>
 
-If we try to register a component with absolute path using another
-path, it does not get reregistered again, so getUtility returns the
-utility using the previously registered path:
+If we move a registered component (which has an absolute path) to new
+place, the registration gets updated after calling registerUtility
+again:
 
+    >>> ignored = self.app.a.b._setObject('c', Folder('c'))
+    >>> si_util = self.app.a.b.si_util.aq_base
+    >>> self.app.a.b._delObject('si_util')
+    >>> si_util.id = 'si_util_cped'
+    >>> ignored = self.app.a.b.c._setObject('si_util_cped', si_util)
     >>> sitemanager_a.registerUtility(
-    ...     self.app.a.b.si_util.aq_base.__of__(self.app.a),
+    ...     self.app.a.b.c.si_util_cped,
     ...     name=u'with_aq_chain',
     ...     provided=ITestUtility)
     >>> zope.component.getUtility(ITestUtility, name='with_aq_chain')
-    <SITestUtility at /a/b/si_util>
+    <SITestUtility at /a/b/c/si_util_cped>
 
 And just to mix things up a bit. Getting back multiple utilities
 should allow us to test aq, non-aq based components and components
@@ -310,7 +315,7 @@ We start with getUtilitiesFor():
     2
     >>> aqutils
     [(u'aq_wrapped', <Utility AQTestUtility "test">), 
-     (u'with_aq_chain', <SITestUtility at /a/b/si_util>)]
+     (u'with_aq_chain', <SITestUtility at /a/b/c/si_util_cped>)]
 
 And then getAllUtilitiesRegisteredFor():
 
@@ -330,7 +335,7 @@ And then getAllUtilitiesRegisteredFor():
     >>> len(aqutils)
     2
     >>> aqutils
-    [<SITestUtility at /a/b/si_util>, <Utility AQTestUtility "test">]
+    [<SITestUtility at /a/b/c/si_util_cped>, <Utility AQTestUtility "test">]
 
 And registeredUtilities():
 
@@ -349,7 +354,7 @@ And registeredUtilities():
     >>> len(aqutils)
     2
     >>> aqutils
-    [<SITestUtility at /a/b/si_util>, <Utility AQTestUtility "test">]
+    [<SITestUtility at /a/b/c/si_util_cped>, <Utility AQTestUtility "test">]
 
 Nested Sites
 ------------

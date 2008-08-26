@@ -200,9 +200,14 @@ class PersistentComponents \
         if provided is None:
             provided = _getUtilityProvided(component)
 
-        if (self._utility_registrations.get((provided, name))
-            == (component, info)):
+        registration = self._utility_registrations.get((provided, name))
+        if (registration == (component, info)):
             # already registered
+            if isinstance(registration[0], ComponentPathWrapper):
+                self.utilities.unsubscribe((), provided, registration[0])
+                # update path
+                registration[0].path = component.getPhysicalPath()
+                self.utilities.subscribe((), provided, registration[0])
             return
 
         subscribed = False

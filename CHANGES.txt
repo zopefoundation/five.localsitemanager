@@ -15,6 +15,12 @@ Changelog
   context. To restore the previous behavior, register utilities
   unwrapped (aq_base).
 
+  For storing path information the component must implement
+  getPhysicalPath and have an absolute path.
+
+  When a component registered as utility is moved and registered again
+  the path stored in registry gets updated.
+
 
 0.4 - 2008-07-23
 ----------------

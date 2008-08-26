@@ -190,6 +190,9 @@ And then getAllUtilitiesRegisteredFor():
 
 And registeredUtilities():
 
+    >>> list(sitemanager.registeredUtilities())
+    [UtilityRegistration(<PersistentComponents site>, ITestUtility, u'hello_world', <Utility TestUtility "test">, u''),
+     UtilityRegistration(<PersistentComponents site>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">, u'')]
     >>> utils = [ r.component for r in sitemanager.registeredUtilities() ]
     >>> len(utils)
     2
@@ -338,6 +341,11 @@ And then getAllUtilitiesRegisteredFor():
     [<SITestUtility at /a/b/c/si_util_cped>, <Utility AQTestUtility "test">]
 
 And registeredUtilities():
+
+    >>> list(sitemanager_a.registeredUtilities())
+    [UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'with_aq_chain', si_util_cped, u''),
+     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">, u''),
+     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'hello_world', <Utility TestUtility "test">, u'')]
 
     >>> utils = [r.component for r in sitemanager_a.registeredUtilities()]
     >>> len(utils)

@@ -6,6 +6,22 @@ Changelog
 
 * Added buildout for project, so testing can be done using ``bin/test``.
 
+* Added ability to register utilities with an absolute path. These
+  utilities are returned wrapped into their original context. This
+  change is backward compatible to existing registries.
+
+  But registering utilities having an acquisition context will behave
+  different because these utilities will be returned in their original
+  context. To restore the previous behavior, register utilities
+  unwrapped (aq_base).
+
+  For storing path information the component must implement
+  getPhysicalPath and have an absolute path.
+
+  When a component registered as utility is moved and registered again
+  the path stored in registry gets updated.
+
+
 0.4 - 2008-07-23
 ----------------
 

@@ -242,8 +242,7 @@ exception otherwise:
     ...                               name=u'with_aq_chain',
     ...                               provided=ITestUtility)
     Traceback (most recent call last):
-    AttributeError: getPhysicalPath
-
+    AttributeError: Component <Utility AQTestUtility "util"> does not implement getPhysicalPath, so register it unwrapped or implement this method.
     >>> import OFS.SimpleItem
     >>> class SITestUtility(OFS.SimpleItem.SimpleItem, TestUtility): pass
     >>> si_util = self.app.a.b._setObject('si_util', SITestUtility('si_util'))
@@ -351,7 +350,6 @@ And registeredUtilities():
     2
     >>> aqutils
     [<SITestUtility at /a/b/si_util>, <Utility AQTestUtility "test">]
-
 
 Nested Sites
 ------------
@@ -466,6 +464,22 @@ registered with:
 
     >>> util1_1.aq_chain
     [<Utility AQTestUtility "util1_1">, <Folder at folder1/folder1_1>, <Folder at folder1>]
+
+Utilities stored with relative path
+-----------------------------------
+
+If we register a utility which has only a relative path, the path is
+_not_ stored and the utility is returned relative to the registry. (In
+the example we register folder_1/folder1_1/util in the registry of
+folder_1.):
+
+    >>> folder1_1._setObject('util', SITestUtility('util'), set_owner=False)
+    'util'
+    >>> sm1.registerUtility(folder1_1.util,
+    ...                     name=u'util2',
+    ...                     provided=ITestUtility)
+    >>> sm1.getUtility(ITestUtility, name='util2')
+    <SITestUtility at folder1/util>
 
 
 Acquisition Context of Global Utilities

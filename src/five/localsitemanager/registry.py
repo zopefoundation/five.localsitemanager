@@ -213,14 +213,22 @@ class PersistentComponents \
                 subscribed = True
                 break
 
-        # store path information if it exists
+        wrapped_component = component
         if hasattr(component, 'aq_parent'):
-            if Acquisition.aq_parent(component) != None:
-                path = component.getPhysicalPath()
+            # component is acquisition wrapped, so try to store path
+            if not hasattr(component, 'getPhysicalPath'):
+                raise AttributeError(
+                    'Component %r does not implement getPhysicalPath, '
+                    'so register it unwrapped or implement this method.' % 
+                    component)
+            path = component.getPhysicalPath()
+            # If the path is relative we can't store it because we
+            # have nearly no chance to use the path for traversal in
+            # getUtility.
+            if path[0] == '':
+                # We have an absolute path, so we can store it.
                 wrapped_component = ComponentPathWrapper(
                     Acquisition.aq_base(component), path)
-        else:
-            wrapped_component = component
         self._utility_registrations[(provided, name)] = wrapped_component, info
         self.utilities.register((), provided, name, wrapped_component)
 

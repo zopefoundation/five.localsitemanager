@@ -1,15 +1,18 @@
 import Acquisition
+import persistent
 import OFS.ObjectManager
 from Acquisition.interfaces import IAcquirer
 from zope.app.component.hooks import getSite
 from zope.app.component.interfaces import ISite
 from zope.component.persistentregistry import PersistentAdapterRegistry
 from zope.component.persistentregistry import PersistentComponents
-from zope.component.registry import UtilityRegistration
+from zope.component.registry import UtilityRegistration, _getUtilityProvided
 from zope.interface.adapter import VerifyingAdapterLookup
 from zope.interface.adapter import _lookup
 from zope.interface.adapter import _lookupAll
 from zope.interface.adapter import _subscriptions
+import zope.event
+import zope.component.interfaces
 from ZPublisher.BaseRequest import RequestContainer
 
 from five.localsitemanager.utils import get_parent
@@ -99,6 +102,11 @@ def _wrap(comp, registry):
     only if the comp has an aq wrapper to begin with.
     """
 
+    # If component is stored as a ComponentPathWrapper, we traverse to
+    # the component using the stored path:
+    if isinstance(comp, ComponentPathWrapper):
+        return getSite().unrestrictedTraverse(comp.path)
+
     # BBB: The primary reason for doing this sort of wrapping of
     # returned utilities is to support CMF tool-like functionality where
     # a tool expects its aq_parent to be the portal object. New code
@@ -156,6 +164,16 @@ def _rewrap(obj):
     return base.__of__(_rewrap(parent))
 
 
+class ComponentPathWrapper(persistent.Persistent):
+    
+    def __init__(self, component, path):
+        self.component = component
+        self.path = path
+
+    def __eq__(self, other):
+        return self.component == other
+    
+
 class PersistentComponents \
           (PersistentComponents,
            OFS.ObjectManager.ObjectManager):
@@ -177,3 +195,51 @@ class PersistentComponents \
             reg.component=_wrap(reg.component, self)
             yield reg
 
+    def registerUtility(self, component, provided=None, name=u'', info=u'',
+                        event=True):
+        if provided is None:
+            provided = _getUtilityProvided(component)
+
+        registration = self._utility_registrations.get((provided, name))
+        if (registration == (component, info)):
+            # already registered
+            if isinstance(registration[0], ComponentPathWrapper):
+                self.utilities.unsubscribe((), provided, registration[0])
+                # update path
+                registration[0].path = component.getPhysicalPath()
+                self.utilities.subscribe((), provided, registration[0])
+            return
+
+        subscribed = False
+        for ((p, _), data) in self._utility_registrations.iteritems():
+            if p == provided and data[0] == component:
+                subscribed = True
+                break
+
+        wrapped_component = component
+        if hasattr(component, 'aq_parent'):
+            # component is acquisition wrapped, so try to store path
+            if not hasattr(component, 'getPhysicalPath'):
+                raise AttributeError(
+                    'Component %r does not implement getPhysicalPath, '
+                    'so register it unwrapped or implement this method.' % 
+                    component)
+            path = component.getPhysicalPath()
+            # If the path is relative we can't store it because we
+            # have nearly no chance to use the path for traversal in
+            # getUtility.
+            if path[0] == '':
+                # We have an absolute path, so we can store it.
+                wrapped_component = ComponentPathWrapper(
+                    Acquisition.aq_base(component), path)
+        self._utility_registrations[(provided, name)] = wrapped_component, info
+        self.utilities.register((), provided, name, wrapped_component)
+
+        if not subscribed:
+            self.utilities.subscribe((), provided, wrapped_component)
+
+        if event:
+            zope.event.notify(zope.component.interfaces.Registered(
+                UtilityRegistration(self, provided, name, component, info)
+                ))
+        

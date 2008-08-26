@@ -108,7 +108,12 @@ Acquisition
 -----------
 
 Now to mix a little required Zope 2 confusion into everything, we must ensure
-that the aq chain is predictable. And based on consensus we decided that the
+that the aq chain is predictable. 
+
+Path relative to component registry
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+And based on consensus we decided that the
 acquired parent of a returned utility should be the ``ISite`` that owns the
 ``ISiteManager`` that returned the utility. We need to ensure all the ways of
 getting a utility have been covered. Of course this should only happen if the
@@ -202,6 +207,151 @@ And registeredUtilities():
     >>> comp = aqutils[0]
     >>> Acquisition.aq_parent(comp) is site
     True
+
+Absolute Path
+~~~~~~~~~~~~~
+
+The approach to return utilites with a acquisition chain relative to
+the component registry has the problem that it can return the wrong
+physical path for the utility so computed URLs for the utility are
+also wrong.
+
+This can be fixed when the parent object of a utility is a local
+component registry. But this is not like in Zope3 and has the problem
+that utility registration is only visible below its registry.
+
+Alternative solution: register the utility with its acquisition
+context and it will be returned wrapped into its original
+context. (Only the physical path is stored not the context itself.)
+
+We set up a hierarchy of folders to show the behavior:
+
+    >>> a = self.app._setObject('a', Folder('a'), set_owner=False)
+    >>> b = self.app.a._setObject('b', Folder('b'), set_owner=False)
+    >>> util = self.app.a.b._setObject(
+    ...     'util', AQTestUtility('util'), set_owner=False)
+
+Now we can make `a` a local component registry an register `util`
+there. We expect the utility to implement getPhysicalPath and raise an
+exception otherwise:
+
+    >>> make_objectmanager_site(self.app.a)
+    >>> setActiveSite(self.app.a)
+    >>> sitemanager_a = self.app.a.getSiteManager()
+    >>> sitemanager_a.registerUtility(self.app.a.b.util,
+    ...                               name=u'with_aq_chain',
+    ...                               provided=ITestUtility)
+    Traceback (most recent call last):
+    AttributeError: getPhysicalPath
+
+    >>> import OFS.SimpleItem
+    >>> class SITestUtility(OFS.SimpleItem.SimpleItem, TestUtility): pass
+    >>> si_util = self.app.a.b._setObject('si_util', SITestUtility('si_util'))
+    >>> sitemanager_a.registerUtility(self.app.a.b.si_util,
+    ...                               name=u'with_aq_chain',
+    ...                               provided=ITestUtility)
+
+When we query the utility, it is returned with its original context:
+
+    >>> si_util = sitemanager_a.getUtility(ITestUtility, name='with_aq_chain')
+    >>> si_util
+    <SITestUtility at /a/b/si_util>
+    >>> si_util.getPhysicalPath()
+    ('', 'a', 'b', 'si_util')
+    >>> si_util.aq_chain
+    [<SITestUtility at /a/b/si_util>, <Folder at /a/b>, <Folder at /a>, <Application at >, <ZPublisher.BaseRequest.RequestContainer object at 0x...>]
+    >>> si_util.absolute_url()
+    'http://nohost/a/b/si_util'
+
+    >>> zope.component.getUtility(ITestUtility, name='with_aq_chain')
+    <SITestUtility at /a/b/si_util>
+
+If we try to register a component with absolute path using another
+path, it does not get reregistered again, so getUtility returns the
+utility using the previously registered path:
+
+    >>> sitemanager_a.registerUtility(
+    ...     self.app.a.b.si_util.aq_base.__of__(self.app.a),
+    ...     name=u'with_aq_chain',
+    ...     provided=ITestUtility)
+    >>> zope.component.getUtility(ITestUtility, name='with_aq_chain')
+    <SITestUtility at /a/b/si_util>
+
+And just to mix things up a bit. Getting back multiple utilities
+should allow us to test aq, non-aq based components and components
+having an absolute aqusition path.
+
+First we have to register aq and non-aq based components in our
+registry (a component having an absolute aqusition path already exists):
+
+    >>> sitemanager_a.registerUtility(AQTestUtility('test'),
+    ...                               name=u'aq_wrapped',
+    ...                               provided=ITestUtility)
+    >>> sitemanager_a.registerUtility(TestUtility('test'),
+    ...                               name=u'hello_world',
+    ...                               provided=ITestUtility)
+
+We start with getUtilitiesFor():
+
+    >>> utils = [x for x in sitemanager_a.getUtilitiesFor(ITestUtility)]
+    >>> len(utils)
+    3
+
+    >>> nonaqutils = [(name, comp)
+    ...               for name, comp in utils if not IAcquirer.providedBy(comp)]
+    >>> len(nonaqutils)
+    1
+    >>> name, comp = nonaqutils[0]
+    >>> Acquisition.aq_parent(comp) is None
+    True
+
+    >>> aqutils = [(name, comp)
+    ...            for name, comp in utils if IAcquirer.providedBy(comp)]
+    >>> len(aqutils)
+    2
+    >>> aqutils
+    [(u'aq_wrapped', <Utility AQTestUtility "test">), 
+     (u'with_aq_chain', <SITestUtility at /a/b/si_util>)]
+
+And then getAllUtilitiesRegisteredFor():
+
+    >>> utils = [x for x in
+    ...          sitemanager_a.getAllUtilitiesRegisteredFor(ITestUtility)]
+    >>> len(utils)
+    3
+
+    >>> nonaqutils = [comp for comp in utils if not IAcquirer.providedBy(comp)]
+    >>> len(nonaqutils)
+    1
+    >>> comp = nonaqutils[0]
+    >>> Acquisition.aq_parent(comp) is None
+    True
+
+    >>> aqutils = [comp for comp in utils if IAcquirer.providedBy(comp)]
+    >>> len(aqutils)
+    2
+    >>> aqutils
+    [<SITestUtility at /a/b/si_util>, <Utility AQTestUtility "test">]
+
+And registeredUtilities():
+
+    >>> utils = [r.component for r in sitemanager_a.registeredUtilities()]
+    >>> len(utils)
+    3
+
+    >>> nonaqutils = [comp for comp in utils if not IAcquirer.providedBy(comp)]
+    >>> len(nonaqutils)
+    1
+    >>> comp = nonaqutils[0]
+    >>> Acquisition.aq_parent(comp) is None
+    True
+
+    >>> aqutils = [comp for comp in utils if IAcquirer.providedBy(comp)]
+    >>> len(aqutils)
+    2
+    >>> aqutils
+    [<SITestUtility at /a/b/si_util>, <Utility AQTestUtility "test">]
+
 
 Nested Sites
 ------------

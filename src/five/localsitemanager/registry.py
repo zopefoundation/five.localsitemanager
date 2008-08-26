@@ -105,9 +105,7 @@ def _wrap(comp, registry):
     # If component is stored as a ComponentPathWrapper, we traverse to
     # the component using the stored path:
     if isinstance(comp, ComponentPathWrapper):
-        return comp.component.__of__(
-            getSite().unrestrictedTraverse(comp.path[:-1]))
-
+        return getSite().unrestrictedTraverse(comp.path)
 
     # BBB: The primary reason for doing this sort of wrapping of
     # returned utilities is to support CMF tool-like functionality where

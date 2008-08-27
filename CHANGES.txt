@@ -1,7 +1,13 @@
 Changelog
 =========
 
-0.5 - Unreleased
+2.0 - Unreleased
+----------------
+
+* Requiring zope.component >= 3.5.0.
+
+
+1.0 - Unreleased
 ----------------
 
 * Added buildout for project, so testing can be done using ``bin/test``.

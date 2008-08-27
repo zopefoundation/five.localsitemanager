@@ -4,7 +4,7 @@ $Id$
 """
 from setuptools import setup, Extension
 
-version = '0.5dev'
+version = '2.0dev'
 
 setup(name='five.localsitemanager',
       version=version,
@@ -33,6 +33,7 @@ setup(name='five.localsitemanager',
       include_package_data = True,
       install_requires=[
         'setuptools',
+        'zope.component >= 3.5.0',
       ],
       zip_safe = False,
       )

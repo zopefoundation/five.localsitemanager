@@ -195,19 +195,24 @@ class PersistentComponents \
             reg.component=_wrap(reg.component, self)
             yield reg
 
-    def registerUtility(self, component, provided=None, name=u'', info=u'',
-                        event=True):
+    def registerUtility(self, component=None, provided=None, name=u'', info=u'',
+                        event=True, factory=None):
+        if factory:
+            if component:
+                raise TypeError("Can't specify factory and component.")
+            component = factory()
+
         if provided is None:
             provided = _getUtilityProvided(component)
 
-        registration = self._utility_registrations.get((provided, name))
-        if (registration == (component, info)):
+        reg = self._utility_registrations.get((provided, name))
+        if reg is not None and reg[:2] == (component, info):
             # already registered
-            if isinstance(registration[0], ComponentPathWrapper):
-                self.utilities.unsubscribe((), provided, registration[0])
+            if isinstance(reg[0], ComponentPathWrapper):
+                self.utilities.unsubscribe((), provided, reg[0])
                 # update path
-                registration[0].path = component.getPhysicalPath()
-                self.utilities.subscribe((), provided, registration[0])
+                reg[0].path = component.getPhysicalPath()
+                self.utilities.subscribe((), provided, reg[0])
             return
 
         subscribed = False
@@ -232,7 +237,8 @@ class PersistentComponents \
                 # We have an absolute path, so we can store it.
                 wrapped_component = ComponentPathWrapper(
                     Acquisition.aq_base(component), path)
-        self._utility_registrations[(provided, name)] = wrapped_component, info
+        self._utility_registrations[(provided, name)] = (
+            wrapped_component, info, factory)
         self.utilities.register((), provided, name, wrapped_component)
 
         if not subscribed:
@@ -240,6 +246,7 @@ class PersistentComponents \
 
         if event:
             zope.event.notify(zope.component.interfaces.Registered(
-                UtilityRegistration(self, provided, name, component, info)
-                ))
+                    UtilityRegistration(
+                        self, provided, name, component, info, factory)
+                    ))
         

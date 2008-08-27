@@ -61,6 +61,16 @@ been configured.
     >>> zope.component.queryUtility(ITestUtility, name=u'hello_world')
     <Utility TestUtility "test">
 
+Utilities are also registerable as factory:
+
+    >>> def test_utility_factory():
+    ...     return TestUtility('factory_test')
+    >>> sitemanager.registerUtility(factory=test_utility_factory,
+    ...                             name=u'factory_test',
+    ...                             provided=ITestUtility)
+    >>> sitemanager.getUtility(ITestUtility, name=u'factory_test')
+    <Utility TestUtility "factory_test">
+
 Adapters
 ---------
 
@@ -149,15 +159,14 @@ We start with getUtilitiesFor():
 
     >>> utils = [x for x in sitemanager.getUtilitiesFor(ITestUtility)]
     >>> len(utils)
-    2
+    3
 
     >>> nonaqutils = [(name, comp)
     ...               for name, comp in utils if not IAcquirer.providedBy(comp)]
     >>> len(nonaqutils)
-    1
-    >>> name, comp = nonaqutils[0]
-    >>> Acquisition.aq_parent(comp) is None
-    True
+    2
+    >>> [Acquisition.aq_parent(comp) is None for name, comp in nonaqutils]
+    [True, True]
 
     >>> aqutils = [(name, comp)
     ...            for name, comp in utils if IAcquirer.providedBy(comp)]
@@ -172,14 +181,13 @@ And then getAllUtilitiesRegisteredFor():
     >>> utils = [x for x in
     ...          sitemanager.getAllUtilitiesRegisteredFor(ITestUtility)]
     >>> len(utils)
-    2
+    3
 
     >>> nonaqutils = [comp for comp in utils if not IAcquirer.providedBy(comp)]
     >>> len(nonaqutils)
-    1
-    >>> comp = nonaqutils[0]
-    >>> Acquisition.aq_parent(comp) is None
-    True
+    2
+    >>> [Acquisition.aq_parent(comp) is None for comp in nonaqutils]
+    [True, True]
 
     >>> aqutils = [comp for comp in utils if IAcquirer.providedBy(comp)]
     >>> len(aqutils)
@@ -190,16 +198,20 @@ And then getAllUtilitiesRegisteredFor():
 
 And registeredUtilities():
 
+    >>> list(sitemanager.registeredUtilities())
+    [UtilityRegistration(<PersistentComponents site>, ITestUtility, u'factory_test', <Utility TestUtility "factory_test">, <function test_utility_factory at 0x...>, u''),
+     UtilityRegistration(<PersistentComponents site>, ITestUtility, u'hello_world', <Utility TestUtility "test">, None, u''),
+     UtilityRegistration(<PersistentComponents site>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">, None, u'')]
+
     >>> utils = [ r.component for r in sitemanager.registeredUtilities() ]
     >>> len(utils)
-    2
+    3
 
     >>> nonaqutils = [comp for comp in utils if not IAcquirer.providedBy(comp)]
     >>> len(nonaqutils)
-    1
-    >>> comp = nonaqutils[0]
-    >>> Acquisition.aq_parent(comp) is None
-    True
+    2
+    >>> [Acquisition.aq_parent(comp) is None for comp in nonaqutils]
+    [True, True]
 
     >>> aqutils = [comp for comp in utils if IAcquirer.providedBy(comp)]
     >>> len(aqutils)
@@ -338,6 +350,11 @@ And then getAllUtilitiesRegisteredFor():
     [<SITestUtility at /a/b/c/si_util_cped>, <Utility AQTestUtility "test">]
 
 And registeredUtilities():
+
+    >>> list(sitemanager_a.registeredUtilities())
+    [UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'with_aq_chain', si_util_cped, None, u''),
+     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">, None, u''), 
+     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'hello_world', <Utility TestUtility "test">, None, u'')]
 
     >>> utils = [r.component for r in sitemanager_a.registeredUtilities()]
     >>> len(utils)

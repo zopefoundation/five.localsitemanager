@@ -5,12 +5,18 @@ Changelog
 ----------------
 
 * Requiring zope.component >= 3.5.0.
+  [icemac]
 
 
 1.0 - Unreleased
 ----------------
 
+
+1.0c1 - 2008-08-27
+------------------
+
 * Added buildout for project, so testing can be done using ``bin/test``.
+  [icemac]
 
 * Added ability to register utilities with an absolute path. These
   utilities are returned wrapped into their original context. This
@@ -26,6 +32,7 @@ Changelog
 
   When a component registered as utility is moved and registered again
   the path stored in registry gets updated.
+  [icemac]
 
 
 0.4 - 2008-07-23
@@ -34,6 +41,7 @@ Changelog
 * Rewrite PersistentComponents.registeredUtilities to not use
   internal methods. This makes it compatible with both zope.component <3.5.0dev
   and >3.5.0dev.
+  [wichert]
 
 
 0.3 - 2007-12-24
@@ -41,6 +49,8 @@ Changelog
 
 * Fixed potential aq problem when assigning various values to the utilities
   registry of the component registry.
+  [hannosch]
+
 
 0.2 - 2007-06-30
 ----------------
@@ -50,6 +60,7 @@ Changelog
   utilities are cached. This requires a special LookupClass called
   'FiveVerifyingAdapterLookup' in all 'utilities' registries used below a
   five.localsitemanager site.
+  [yuppie, hannosch]
 
 
 0.1.2 - 2007-06-23
@@ -69,4 +80,3 @@ Changelog
 ----------------
 
 * Initial version
-

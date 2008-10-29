@@ -1,8 +1,18 @@
 Changelog
 =========
 
-1.0
----
+1.1 (unreleased)
+----------------
+
+* Utilities registered with an absolute path were returned with the
+  RequestContainer in the aq_chain. As the result of the first utility
+  look-up is stored in the adapter look-up cache, subsequent utility
+  look-ups return the utlitiy with the RequestContainer of the first
+  look-up.
+  
+  Solution: For utilities registered with an absolute path the
+  RequestContainer is now also removed at look-up.
+  [icemac]
 
 
 1.0c1 - 2008-08-27

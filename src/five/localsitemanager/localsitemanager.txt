@@ -270,9 +270,9 @@ When we query the utility, it is returned with its original context:
     >>> si_util.getPhysicalPath()
     ('', 'a', 'b', 'si_util')
     >>> si_util.aq_chain
-    [<SITestUtility at /a/b/si_util>, <Folder at /a/b>, <Folder at /a>, <Application at >, <ZPublisher.BaseRequest.RequestContainer object at 0x...>]
+    [<SITestUtility at /a/b/si_util>, <Folder at /a/b>, <Folder at /a>, <Application at >]
     >>> si_util.absolute_url()
-    'http://nohost/a/b/si_util'
+    'a/b/si_util'
 
     >>> zope.component.getUtility(ITestUtility, name='with_aq_chain')
     <SITestUtility at /a/b/si_util>

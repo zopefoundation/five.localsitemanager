@@ -37,30 +37,24 @@ def make_objectmanager_site(obj):
     """
     make_site(obj, IObjectManagerSite)
 
-
+# Zope 3 version: zope.app.component.site._findNextSiteManager
 def find_next_sitemanager(site):
     """Find the closest sitemanager that is not the specified site's
     sitemanager.
     """
-    container = site
-    sm = None
-    while sm is None:
-        if IContainmentRoot.providedBy(container):
-            # We are at the root site, return None
+    while True:
+        if IContainmentRoot.providedBy(site):
+            # we're the root site, return None
             return None
 
         try:
-            container = get_parent(container)
-            if container is None:
-                return None
+            site = get_parent(site)
         except TypeError:
-            # There was not enough context; probably run from a test
+            # there was not enough context; probably run from a test
             return None
 
-        if ISite.providedBy(container):
-            sm = container.getSiteManager()
-    return sm
-
+        if ISite.providedBy(site):
+            return site.getSiteManager()
 
 def update_sitemanager_bases(site):
     """Formulate the most appropriate __bases__ value for a site's site manager
@@ -74,6 +68,8 @@ def update_sitemanager_bases(site):
     sm = site.getSiteManager()
     sm.__bases__ = (next, )
 
-
+# Zope 3 version: zope.app.component.site.changeSiteConfigurationAfterMove
 def update_sitemanager_bases_handler(site, event):
-    update_sitemanager_bases(site)
+    """After a site is moved, its site manager links have to be updated."""
+    if event.newParent is not None:
+        update_sitemanager_bases(site)

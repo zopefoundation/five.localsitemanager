@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1 (unreleased)
+1.0 - 2008-11-18
 ----------------
 
 * Utilities registered with an absolute path were returned with the

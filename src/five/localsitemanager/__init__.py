@@ -1,3 +1,20 @@
+##############################################################################
+#
+# Copyright (c) 2007 Zope Corporation and Contributors. All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+"""Local site manager for Zope 2.
+
+$Id$
+"""
+
 from Acquisition import aq_base
 from zope.component.globalregistry import base
 from zope.traversing.interfaces import IContainmentRoot
@@ -14,22 +31,16 @@ def make_site(obj, iface=ISite):
     """
     if ISite.providedBy(obj):
         raise ValueError('This is already a site')
-    
+
     next = find_next_sitemanager(obj)
     if next is None:
         next = base
 
     enableSite(obj, iface=iface)
 
-    name = 'five'
-    path = getattr(obj, 'getPhysicalPath', None)
-    if path is not None and callable(path):
-        name = '/'.join(path())
-
-    components = PersistentComponents(name=name, bases=(next,))
+    components = PersistentComponents('++etc++site', bases=(next,))
     obj.setSiteManager(components)
     components.__parent__ = aq_base(obj)
-
 
 def make_objectmanager_site(obj):
     """Just a bit of sugar coating to make an unnofficial objectmanager

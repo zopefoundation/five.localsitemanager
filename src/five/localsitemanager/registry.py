@@ -1,3 +1,20 @@
+##############################################################################
+#
+# Copyright (c) 2007 Zope Corporation and Contributors. All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+"""Component registry for local site manager.
+
+$Id$
+"""
+
 import Acquisition
 import persistent
 import OFS.ObjectManager
@@ -189,6 +206,18 @@ class PersistentComponents \
         utilities.LookupClass = FiveVerifyingAdapterLookup
         utilities._createLookup()
         utilities.__parent__ = self
+
+    def __repr__(self):
+        url = 'five'
+        site = Acquisition.aq_base(self.__parent__)
+        try:
+            site = _wrap(site, self)
+        except (ValueError, TypeError):
+            pass
+        path = getattr(site, 'getPhysicalPath', None)
+        if path is not None and callable(path):
+            url = '/'.join(path())
+        return "<%s %s>" % (self.__class__.__name__, url)
 
     def registeredUtilities(self):
         for reg in super(PersistentComponents, self).registeredUtilities():

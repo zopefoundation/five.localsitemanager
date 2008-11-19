@@ -4,6 +4,11 @@ Changelog
 2.0 - Unreleased
 ----------------
 
+* 'make_site' no longer stores the path of the site manager in its name. This
+  way the name can't become out-dated. PersistentComponents' __repr__ method
+  now returns the current path instead of the name of the site manager.
+  [yuppie]
+
 * Requiring zope.component >= 3.5.0.
   [icemac]
 

@@ -4,7 +4,7 @@ Installation
 Prerequisites
 -------------
 
-* Zope 2.10.x or newer
+* Zope 2.12.x or newer
 
 * setuptools_
 

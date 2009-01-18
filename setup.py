@@ -23,17 +23,25 @@ setup(name='five.localsitemanager',
           'Operating System :: OS Independent',
           'Programming Language :: Python',
           'Topic :: Internet :: WWW/HTTP :: Site Management',
-          'Topic :: Software Development :: Libraries :: Python Modules',
       ],
       keywords='zope zope2 zope3 five sitemanager',
-
       packages=['five', 'five.localsitemanager'],
       package_dir = {'': 'src'},
       namespace_packages=['five',],
       include_package_data = True,
+      extras_require=dict(
+          test=['zope.testing']
+          ),
       install_requires=[
         'setuptools',
         'zope.component >= 3.5.0',
+        'zope.event',
+        'zope.interface',
+        'zope.traversing',
+        'zope.app.component',
+        'Acquisition',
+        'Zope2',
+        'ZODB3',
       ],
       zip_safe = False,
       )

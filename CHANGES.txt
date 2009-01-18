@@ -4,6 +4,10 @@ Changelog
 2.0 - Unreleased
 ----------------
 
+* Specify all package dependencies including Acquisition and Zope2. You need
+  to use either the eggified Zope 2.12 or create fake-eggs for these.
+  [hannosch]
+
 * 'make_site' no longer stores the path of the site manager in its name. This
   way the name can't become out-dated. PersistentComponents' __repr__ method
   now returns the current path instead of the name of the site manager.

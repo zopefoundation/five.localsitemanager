@@ -2,7 +2,7 @@
 
 $Id$
 """
-from setuptools import setup, Extension
+from setuptools import setup
 
 version = '2.0dev'
 
@@ -35,10 +35,12 @@ setup(name='five.localsitemanager',
       install_requires=[
         'setuptools',
         'zope.component >= 3.5.0',
+        'zope.container',
         'zope.event',
         'zope.interface',
+        'zope.location >= 3.5.0',
+        'zope.site >= 3.6.0',
         'zope.traversing',
-        'zope.app.component',
         'Acquisition',
         'Zope2',
         'ZODB3',

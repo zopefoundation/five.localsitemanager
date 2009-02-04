@@ -10,10 +10,9 @@ We start from an empty folder. Since ``OFS.Folder``'s extend
 Of course we now need to transform that IPossibleSite into a real ISite.
 
     >>> import zope.component
-    >>> from zope.app.component.hooks import setSite as setActiveSite
-    >>> from zope.app.component.hooks import clearSite
+    >>> from zope.site.hooks import setSite
 
-    >>> from zope.app.component.hooks import setHooks
+    >>> from zope.site.hooks import setHooks
     >>> setHooks()
 
     >>> from five.localsitemanager import make_objectmanager_site
@@ -53,11 +52,11 @@ setting up a test utility.
 Make sure the utility lookup only works when the correct active site has
 been configured.
 
-    >>> setActiveSite(None)
+    >>> setSite()
     >>> zope.component.queryUtility(ITestUtility, name=u'hello_world') is None
     True
 
-    >>> setActiveSite(site)
+    >>> setSite(site)
     >>> zope.component.queryUtility(ITestUtility, name=u'hello_world')
     <Utility TestUtility "test">
 
@@ -104,11 +103,11 @@ setting up a test adapter.
 Make sure the adapter lookup only works when the correct active site has
 been configured.
 
-    >>> setActiveSite(None)
+    >>> setSite()
     >>> zope.component.queryAdapter(Foo('foo'), ITestAdapter) is None
     True
 
-    >>> setActiveSite(site)
+    >>> setSite(site)
     >>> zope.component.queryAdapter(Foo('foo'), ITestAdapter)
     <Adapter TestAdapter adapting "foo">
     >>> ITestAdapter(Foo('foo'))
@@ -248,7 +247,7 @@ there. We expect the utility to implement getPhysicalPath and raise an
 exception otherwise:
 
     >>> make_objectmanager_site(self.app.a)
-    >>> setActiveSite(self.app.a)
+    >>> setSite(self.app.a)
     >>> sitemanager_a = self.app.a.getSiteManager()
     >>> sitemanager_a.registerUtility(self.app.a.b.util,
     ...                               name=u'with_aq_chain',
@@ -454,7 +453,7 @@ Register a utility with both of the nested site managers:
 
 Lookup both utilities in the context of the first site manager:
 
-    >>> setActiveSite(folder1)
+    >>> setSite(folder1)
     >>> util1 = queryUtility(ITestUtility, name=u'util1')
     >>> util1
     <Utility AQTestUtility "util1">
@@ -469,7 +468,7 @@ The second utility isn't available in the first site manager:
 
 Lookup both utilities in the context of the second site manager:
 
-    >>> setActiveSite(folder1_1)
+    >>> setSite(folder1_1)
     >>> util1 = queryUtility(ITestUtility, name=u'util1')
     >>> util1
     <Utility AQTestUtility "util1">
@@ -523,7 +522,7 @@ Register a utility with both of the nested site managers:
 
 Lookup both utilities in the context of the global site manager:
 
-    >>> clearSite()
+    >>> setSite()
     >>> globalutil1 = queryUtility(ITestUtility, name=u'globalutil1')
     >>> globalutil1
     <Utility AQTestUtility "globalutil1">
@@ -538,7 +537,7 @@ The local utility isn't available in the global site manager:
 
 Lookup both utilities in the context of the local site manager:
 
-    >>> setActiveSite(folder1)
+    >>> setSite(folder1)
     >>> globalutil1 = queryUtility(ITestUtility, name=u'globalutil1')
     >>> globalutil1
     <Utility AQTestUtility "globalutil1">
@@ -562,5 +561,5 @@ Clean up
 --------
 
     >>> from zope.testing.cleanup import cleanUp
-    >>> clearSite()
+    >>> setSite()
     >>> cleanUp()

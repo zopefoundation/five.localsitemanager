@@ -19,8 +19,7 @@ import Acquisition
 import persistent
 import OFS.ObjectManager
 from Acquisition.interfaces import IAcquirer
-from zope.app.component.hooks import getSite
-from zope.app.component.interfaces import ISite
+from zope.location.interfaces import ISite
 from zope.component.persistentregistry import PersistentAdapterRegistry
 from zope.component.persistentregistry import PersistentComponents
 from zope.component.registry import UtilityRegistration, _getUtilityProvided
@@ -28,6 +27,7 @@ from zope.interface.adapter import VerifyingAdapterLookup
 from zope.interface.adapter import _lookup
 from zope.interface.adapter import _lookupAll
 from zope.interface.adapter import _subscriptions
+from zope.site.hooks import getSite
 import zope.event
 import zope.component.interfaces
 from ZPublisher.BaseRequest import RequestContainer

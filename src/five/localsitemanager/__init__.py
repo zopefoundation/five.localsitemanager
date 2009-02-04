@@ -18,7 +18,7 @@ $Id$
 from Acquisition import aq_base
 from zope.component.globalregistry import base
 from zope.traversing.interfaces import IContainmentRoot
-from zope.app.component.interfaces import ISite
+from zope.location.interfaces import ISite
 from five.localsitemanager.registry import PersistentComponents
 from five.localsitemanager.utils import get_parent
 from Products.Five.component.interfaces import IObjectManagerSite
@@ -48,7 +48,7 @@ def make_objectmanager_site(obj):
     """
     make_site(obj, IObjectManagerSite)
 
-# Zope 3 version: zope.app.component.site._findNextSiteManager
+# Zope 3 version: zope.site.site._findNextSiteManager
 def find_next_sitemanager(site):
     """Find the closest sitemanager that is not the specified site's
     sitemanager.
@@ -79,7 +79,7 @@ def update_sitemanager_bases(site):
     sm = site.getSiteManager()
     sm.__bases__ = (next, )
 
-# Zope 3 version: zope.app.component.site.changeSiteConfigurationAfterMove
+# Zope 3 version: zope.site.site.changeSiteConfigurationAfterMove
 def update_sitemanager_bases_handler(site, event):
     """After a site is moved, its site manager links have to be updated."""
     if event.newParent is not None:

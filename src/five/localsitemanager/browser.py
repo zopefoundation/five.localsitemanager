@@ -15,7 +15,7 @@
 $Id$
 """
 
-from zope.app.component.hooks import setSite
+from zope.site.hooks import setSite
 from zope.component.globalregistry import base
 from five.localsitemanager import make_objectmanager_site
 

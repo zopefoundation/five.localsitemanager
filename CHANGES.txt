@@ -4,6 +4,10 @@ Changelog
 2.0 - Unreleased
 ----------------
 
+* Adjusted code to use the new zope.site and zope.container packages and use
+  the ISite interface from zope.location.
+  [hannosch]
+
 * Specify all package dependencies including Acquisition and Zope2. You need
   to use either the eggified Zope 2.12 or create fake-eggs for these.
   [hannosch]

@@ -197,7 +197,7 @@ And then getAllUtilitiesRegisteredFor():
 
 And registeredUtilities():
 
-    >>> sorted(sitemanager.registeredUtilities())
+    >>> sorted(sitemanager.registeredUtilities(), key=lambda x:x.name)
     [UtilityRegistration(<PersistentComponents site>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">, None, u''),
      UtilityRegistration(<PersistentComponents site>, ITestUtility, u'factory_test', <Utility TestUtility "factory_test">, <function test_utility_factory at 0x...>, u''),
      UtilityRegistration(<PersistentComponents site>, ITestUtility, u'hello_world', <Utility TestUtility "test">, None, u'')]
@@ -345,13 +345,13 @@ And then getAllUtilitiesRegisteredFor():
     >>> aqutils = [comp for comp in utils if IAcquirer.providedBy(comp)]
     >>> len(aqutils)
     2
-    >>> sorted(aqutils)
-    [<Utility AQTestUtility "test">,
-     <SITestUtility at /a/b/c/si_util_cped>]
+    >>> sorted(aqutils, key=lambda x:x.id)
+    [<SITestUtility at /a/b/c/si_util_cped>,
+     <Utility AQTestUtility "test">]
 
 And registeredUtilities():
 
-    >>> sorted(sitemanager_a.registeredUtilities())
+    >>> sorted(sitemanager_a.registeredUtilities(), key=lambda x:x.name)
     [UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">, None, u''), 
      UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'hello_world', <Utility TestUtility "test">, None, u''),
      UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'with_aq_chain', si_util_cped, None, u'')]
@@ -370,9 +370,10 @@ And registeredUtilities():
     >>> aqutils = [comp for comp in utils if IAcquirer.providedBy(comp)]
     >>> len(aqutils)
     2
-    >>> sorted(aqutils)
-    [<Utility AQTestUtility "test">,
-     <SITestUtility at /a/b/c/si_util_cped>]
+    >>> sorted(aqutils, key=lambda x:x.id)
+    [<SITestUtility at /a/b/c/si_util_cped>,
+     <Utility AQTestUtility "test">]
+
 
 Nested Sites
 ------------

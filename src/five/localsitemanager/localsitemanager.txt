@@ -197,10 +197,10 @@ And then getAllUtilitiesRegisteredFor():
 
 And registeredUtilities():
 
-    >>> list(sitemanager.registeredUtilities())
-    [UtilityRegistration(<PersistentComponents site>, ITestUtility, u'factory_test', <Utility TestUtility "factory_test">, <function test_utility_factory at 0x...>, u''),
-     UtilityRegistration(<PersistentComponents site>, ITestUtility, u'hello_world', <Utility TestUtility "test">, None, u''),
-     UtilityRegistration(<PersistentComponents site>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">, None, u'')]
+    >>> sorted(sitemanager.registeredUtilities())
+    [UtilityRegistration(<PersistentComponents site>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">, None, u''),
+     UtilityRegistration(<PersistentComponents site>, ITestUtility, u'factory_test', <Utility TestUtility "factory_test">, <function test_utility_factory at 0x...>, u''),
+     UtilityRegistration(<PersistentComponents site>, ITestUtility, u'hello_world', <Utility TestUtility "test">, None, u'')]
 
     >>> utils = [ r.component for r in sitemanager.registeredUtilities() ]
     >>> len(utils)
@@ -350,10 +350,10 @@ And then getAllUtilitiesRegisteredFor():
 
 And registeredUtilities():
 
-    >>> list(sitemanager_a.registeredUtilities())
-    [UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'with_aq_chain', si_util_cped, None, u''),
-     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">, None, u''), 
-     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'hello_world', <Utility TestUtility "test">, None, u'')]
+    >>> sorted(sitemanager_a.registeredUtilities())
+    [UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">, None, u''), 
+     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'hello_world', <Utility TestUtility "test">, None, u''),
+     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'with_aq_chain', si_util_cped, None, u'')]
 
     >>> utils = [r.component for r in sitemanager_a.registeredUtilities()]
     >>> len(utils)
@@ -369,8 +369,9 @@ And registeredUtilities():
     >>> aqutils = [comp for comp in utils if IAcquirer.providedBy(comp)]
     >>> len(aqutils)
     2
-    >>> aqutils
-    [<SITestUtility at /a/b/c/si_util_cped>, <Utility AQTestUtility "test">]
+    >>> sorted(aqutils)
+    [<Utility AQTestUtility "test">,
+     <SITestUtility at /a/b/c/si_util_cped>]
 
 Nested Sites
 ------------

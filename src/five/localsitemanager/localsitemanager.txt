@@ -345,8 +345,9 @@ And then getAllUtilitiesRegisteredFor():
     >>> aqutils = [comp for comp in utils if IAcquirer.providedBy(comp)]
     >>> len(aqutils)
     2
-    >>> aqutils
-    [<SITestUtility at /a/b/c/si_util_cped>, <Utility AQTestUtility "test">]
+    >>> sorted(aqutils)
+    [<Utility AQTestUtility "test">,
+     <SITestUtility at /a/b/c/si_util_cped>]
 
 And registeredUtilities():
 

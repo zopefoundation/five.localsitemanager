@@ -34,17 +34,7 @@ setup(name='five.localsitemanager',
           ),
       install_requires=[
         'setuptools',
-        'zope.component >= 3.5.0',
-        'zope.container',
-        'zope.event',
-        'zope.interface',
-        'zope.location >= 3.5.0',
-        'zope.site >= 3.6.0',
-        'zope.traversing',
-        'Acquisition',
-        'Zope2',
-        'ZODB3',
+        'Zope2 >= 2.12.dev',
       ],
       zip_safe = False,
       )
-

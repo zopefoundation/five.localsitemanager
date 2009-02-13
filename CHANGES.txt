@@ -4,6 +4,9 @@ Changelog
 2.0 - Unreleased
 ----------------
 
+* Removed package dependencies that did collide with the KGS of Zope 2.12.
+  [yuppie]
+
 * Adjusted code to use the new zope.site and zope.container packages and use
   the ISite interface from zope.location.
   [hannosch]
@@ -20,6 +23,10 @@ Changelog
 * Requiring zope.component >= 3.5.0.
   [icemac]
 
+
+1.0 - 2008-11-18
+----------------
+
 * Utilities registered with an absolute path were returned with the
   RequestContainer in the aq_chain. As the result of the first utility
   look-up is stored in the adapter look-up cache, subsequent utility
@@ -29,6 +36,7 @@ Changelog
   Solution: For utilities registered with an absolute path the
   RequestContainer is now also removed at look-up.
   [icemac]
+
 
 1.0c1 - 2008-08-27
 ------------------

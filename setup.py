@@ -33,7 +33,7 @@ setup(name='five.localsitemanager',
       include_package_data = True,
       install_requires=[
         'setuptools',
-        'zope.component < 3.5dev',
+        'zope.component < 3.6dev',
       ],
       zip_safe = False,
       )

@@ -4,7 +4,7 @@
 
   <subscriber
       for="Products.Five.component.interfaces.IObjectManagerSite
-           zope.container.interfaces.IObjectMovedEvent"
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
       handler=".update_sitemanager_bases_handler"
       />
 

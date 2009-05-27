@@ -8,7 +8,7 @@ version = '2.0dev'
 
 setup(name='five.localsitemanager',
       version=version,
-      url='http://svn.zope.org/five.localsitemanager',
+      url='http://pypi.python.org/pypi/five.localsitemanager',
       license='ZPL 2.1',
       description='Local site manager implementation for Zope 2',
       author='Rocky Burt and Contributors',
@@ -33,8 +33,17 @@ setup(name='five.localsitemanager',
           test=['zope.testing']
           ),
       install_requires=[
-        'setuptools',
+        'Acquisition',
         'Zope2 >= 2.12.dev',
+        'ZODB3',
+        'setuptools',
+        'zope.component',
+        'zope.event',
+        'zope.interface',
+        'zope.location',
+        'zope.lifecycleevent >= 3.5.2',
+        'zope.site',
+        'zope.traversing',
       ],
       zip_safe = False,
       )

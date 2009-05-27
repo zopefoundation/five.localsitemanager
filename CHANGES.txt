@@ -1,8 +1,12 @@
 Changelog
 =========
 
-2.0 - Unreleased
+2.0 - unreleased
 ----------------
+
+* Updated to use IObjectMovedEvent from zope.lifecycleevent instead of
+  zope.container. We require zope.lifecycleevent >= 3.5.2 now.
+  [hannosch]
 
 * Removed package dependencies that did collide with the KGS of Zope 2.12.
   [yuppie]

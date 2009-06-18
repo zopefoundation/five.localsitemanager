@@ -1,7 +1,7 @@
 from zope.traversing.interfaces import IContainmentRoot
 
 from Acquisition import aq_parent, aq_inner
-
+from Acquisition.interfaces import IAcquirer
 
 def get_parent(obj):
     """Returns the container the object was traversed via.  This
@@ -16,11 +16,12 @@ def get_parent(obj):
     if IContainmentRoot.providedBy(obj):
         return None
     
+    if IAcquirer.providedBy(obj):
+        parent = aq_parent(aq_inner(obj))
+        if parent is not None:
+            return parent
+        
     parent = getattr(obj, '__parent__', None)
-    if parent is not None:
-        return parent
-
-    parent = aq_parent(aq_inner(obj))
     if parent is not None:
         return parent
 

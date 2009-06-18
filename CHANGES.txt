@@ -4,6 +4,14 @@ Changelog
 1.1 - unreleased
 ----------------
 
+* Don't prefer using __parent__ over using aq_parent() to find the parent when
+  looking for a registry. This causes nasty acquisition infinite recursion
+  because doing getattr(obj, '__parent__') when obj supports implicit
+  acquisition gives you back the parent acquisition-wrapped in the child.
+  It's not a problem until some parent *doesn't* have a __parent__ pointer,
+  at which point we end up trying to use aq_parent() and get into a loop.
+  [optilude]
+
 * Made zope.component 3.5 support official and adjusted tests.
 
 1.0 - 2008-11-18

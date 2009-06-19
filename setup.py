@@ -4,7 +4,7 @@ $Id$
 """
 from setuptools import setup, Extension
 
-version = '1.1'
+version = '1.2dev'
 
 setup(name='five.localsitemanager',
       version=version,

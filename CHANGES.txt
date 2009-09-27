@@ -4,6 +4,10 @@ Changelog
 2.0dev - unreleased
 -------------------
 
+* Made sure that the __of__ method is only called on objects providing the
+  IAcquirer interface.
+  [hannosch]
+
 * Updated forked registerUtility method to match the zope.component 3.7.1
   code base. This fixes the two bugs with the implicit unregistration of
   utilities for existing interface / name pairs.

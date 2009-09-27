@@ -122,7 +122,11 @@ def _wrap(comp, registry):
     # If component is stored as a ComponentPathWrapper, we traverse to
     # the component using the stored path:
     if isinstance(comp, ComponentPathWrapper):
-        return _rewrap(getSite().unrestrictedTraverse(comp.path))
+        comp = getSite().unrestrictedTraverse(comp.path)
+        if IAcquirer.providedBy(comp):
+            return _rewrap(comp)
+        else:
+            return comp
 
     # BBB: The primary reason for doing this sort of wrapping of
     # returned utilities is to support CMF tool-like functionality where
@@ -172,7 +176,11 @@ def _wrap(comp, registry):
 
     return comp
 
+
 def _rewrap(obj):
+    """This functions relies on the passed in obj to provide the IAcquirer
+    interface.
+    """
     obj = Acquisition.aq_inner(obj)
     base = Acquisition.aq_base(obj)
     parent = Acquisition.aq_parent(obj)

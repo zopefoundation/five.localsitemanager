@@ -1,6 +1,4 @@
 """Setup for five.localsitemanager package
-
-$Id$
 """
 from setuptools import setup
 

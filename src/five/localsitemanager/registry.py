@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """Component registry for local site manager.
-
-$Id$
 """
 
 import Acquisition

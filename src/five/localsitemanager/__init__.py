@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """Local site manager for Zope 2.
-
-$Id$
 """
 
 from Acquisition import aq_base

@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """Management view for local site manager.
-
-$Id$
 """
 
 from zope.site.hooks import setSite

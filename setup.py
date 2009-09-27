@@ -2,7 +2,7 @@
 """
 from setuptools import setup
 
-version = '2.0dev'
+version = '2.0'
 
 setup(name='five.localsitemanager',
       version=version,

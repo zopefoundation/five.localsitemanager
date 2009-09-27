@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.0dev - unreleased
--------------------
+2.0 - 2009-09-27
+----------------
 
 * Cleaned up package documentation and fixed spelling errors in the tests.
   [hannosch]

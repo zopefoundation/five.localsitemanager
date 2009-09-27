@@ -4,6 +4,9 @@ Changelog
 2.0dev - unreleased
 -------------------
 
+* Cleaned up package documentation and fixed spelling errors in the tests.
+  [hannosch]
+
 * Made sure that the __of__ method is only called on objects providing the
   IAcquirer interface.
   [hannosch]

@@ -49,8 +49,8 @@ setting up a test utility.
     >>> sitemanager.getUtility(ITestUtility, name=u'hello_world')
     <Utility TestUtility "test">
 
-Make sure the utility lookup only works when the correct active site has
-been configured.
+Make sure the utility lookup only works when the correct active site has been
+configured.
 
     >>> setSite()
     >>> zope.component.queryUtility(ITestUtility, name=u'hello_world') is None
@@ -60,7 +60,7 @@ been configured.
     >>> zope.component.queryUtility(ITestUtility, name=u'hello_world')
     <Utility TestUtility "test">
 
-Utilities are also registerable as factory:
+Utilities are also registrable as factory:
 
     >>> def test_utility_factory():
     ...     return TestUtility('factory_test')
@@ -100,8 +100,8 @@ setting up a test adapter.
     >>> sitemanager.getAdapter(Foo('foo'), ITestAdapter)
     <Adapter TestAdapter adapting "foo">
 
-Make sure the adapter lookup only works when the correct active site has
-been configured.
+Make sure the adapter lookup only works when the correct active site has been
+configured.
 
     >>> setSite()
     >>> zope.component.queryAdapter(Foo('foo'), ITestAdapter) is None
@@ -117,42 +117,42 @@ Acquisition
 -----------
 
 Now to mix a little required Zope 2 confusion into everything, we must ensure
-that the aq chain is predictable. 
+that the Acquisition chain is predictable.
 
 Path relative to component registry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-And based on consensus we decided that the
-acquired parent of a returned utility should be the ``ISite`` that owns the
-``ISiteManager`` that returned the utility. We need to ensure all the ways of
-getting a utility have been covered. Of course this should only happen if the
-utility is acquisition aware to begin with.
+And based on consensus we decided that the acquired parent of a returned
+utility should be the ``ISite`` that owns the ``ISiteManager`` that returned
+the utility. We need to ensure all the ways of getting a utility have been
+covered. Of course this should only happen if the utility is Acquisition aware
+to begin with.
 
     >>> import Acquisition
     >>> from Acquisition.interfaces import IAcquirer
 
-First off, our utility isn't aq-wrapped so asking it what is aq_parent is
-should return None.
+First off, our utility isn't Acquisition-wrapped so asking it what is aq_parent
+is should return None.
 
     >>> comp = sitemanager.queryUtility(ITestUtility, name=u'hello_world')
     >>> Acquisition.aq_parent(comp) is None
     True
 
-So now we setup a utility that is aq-aware.
+So now we setup a utility that is Acquisition-aware.
 
     >>> class AQTestUtility(Acquisition.Explicit, TestUtility): pass
     >>> sitemanager.registerUtility(AQTestUtility('test'),
     ...                             name=u'aq_wrapped',
     ...                             provided=ITestUtility)
 
-And of course the aq parent should be the site now.
+And of course the Acquisition parent should be the site now.
 
     >>> comp = sitemanager.getUtility(ITestUtility, name=u'aq_wrapped')
     >>> Acquisition.aq_parent(comp) is site
     True
 
 And just to mix things up a bit. Getting back multiple utilities should allow
-us to test both aq and non-aq based components.
+us to test both Acquisition and non-Acquisition based components.
 
 We start with getUtilitiesFor():
 
@@ -222,18 +222,17 @@ And registeredUtilities():
 Absolute Path
 ~~~~~~~~~~~~~
 
-The approach to return utilites with a acquisition chain relative to
-the component registry has the problem that it can return the wrong
-physical path for the utility so computed URLs for the utility are
-also wrong.
+The approach to return utilities with an Acquisition chain relative to the
+component registry has the problem that it can return the wrong physical path
+for the utility so computed URLs for the utility are also wrong.
 
-This can be fixed when the parent object of a utility is a local
-component registry. But this is not like in Zope3 and has the problem
-that utility registration is only visible below its registry.
+This can be fixed when the parent object of a utility is a local component
+registry. But this is not like in the original code and has the problem that
+utility registration is only visible below its registry.
 
-Alternative solution: register the utility with its acquisition
-context and it will be returned wrapped into its original
-context. (Only the physical path is stored not the context itself.)
+Alternative solution: register the utility with its Acquisition context and it
+will be returned wrapped into its original context. (Only the physical path is
+stored not the context itself.)
 
 We set up a hierarchy of folders to show the behavior:
 
@@ -242,9 +241,9 @@ We set up a hierarchy of folders to show the behavior:
     >>> util = self.app.a.b._setObject(
     ...     'util', AQTestUtility('util'), set_owner=False)
 
-Now we can make `a` a local component registry an register `util`
-there. We expect the utility to implement getPhysicalPath and raise an
-exception otherwise:
+Now we can make `a` a local component registry an register `util` there. We
+expect the utility to implement getPhysicalPath and raise an exception
+otherwise:
 
     >>> make_objectmanager_site(self.app.a)
     >>> setSite(self.app.a)
@@ -276,9 +275,8 @@ When we query the utility, it is returned with its original context:
     >>> zope.component.getUtility(ITestUtility, name=u'with_aq_chain')
     <SITestUtility at /a/b/si_util>
 
-If we move a registered component (which has an absolute path) to new
-place, the registration gets updated after calling registerUtility
-again:
+If we move a registered component (which has an absolute path) to new place,
+the registration gets updated after calling registerUtility again:
 
     >>> ignored = self.app.a.b._setObject('c', Folder('c'))
     >>> si_util = self.app.a.b.si_util.aq_base
@@ -292,12 +290,12 @@ again:
     >>> zope.component.getUtility(ITestUtility, name=u'with_aq_chain')
     <SITestUtility at /a/b/c/si_util_cped>
 
-And just to mix things up a bit. Getting back multiple utilities
-should allow us to test aq, non-aq based components and components
-having an absolute Acquisition path.
+And just to mix things up a bit. Getting back multiple utilities should allow
+us to test Acquisition, non-Acquisition based components and components having
+an absolute Acquisition path.
 
-First we have to register aq and non-aq based components in our
-registry (a component having an absolute Acquisition path already exists):
+First we have to register Acquisition and non-Acquisition based components in
+our registry (a component having an absolute Acquisition path already exists):
 
     >>> sitemanager_a.registerUtility(AQTestUtility('test'),
     ...                               name=u'aq_wrapped',
@@ -379,12 +377,12 @@ Nested Sites
 ------------
 
 Whenever a component is queried using the component registry, the active
-component registry (ie site manager) needs to be smart enough to check all
+component registry (i.e. site manager) needs to be smart enough to check all
 *parent* component registries as well.
 
 Implementation-wise this means that each component registry needs to have an
 appropriate ``__bases__`` attribute configured that is aware of containment
-and (in the case of Zope 2) acquisition to some respect.
+and (in the case of Zope 2) Acquisition to some respect.
 
 Start by creating some nested sites.
 
@@ -404,8 +402,7 @@ Now we check the actual next-site-lookup logic to make sure it's working.
 
     >>> from five.localsitemanager import find_next_sitemanager, get_parent
 
-Needed to implement our own get_parent (zope3 has one) that is acquisition
-aware.
+Needed to implement our own get_parent that is Acquisition aware.
 
     >>> get_parent(folder1)
     Traceback (most recent call last):
@@ -416,8 +413,8 @@ aware.
     <Folder at folder1>
 
 Any logic that sets up a site manager's ``__bases__`` will use the
-``find_next_sitemanager`` function to figure out the next closest place
-to look.
+``find_next_sitemanager`` function to figure out the next closest place to
+look.
 
     >>> find_next_sitemanager(folder1) is None
     True
@@ -492,10 +489,9 @@ registered with:
 Utilities stored with relative path
 -----------------------------------
 
-If we register a utility which has only a relative path, the path is
-_not_ stored and the utility is returned relative to the registry. (In
-the example we register folder_1/folder1_1/util in the registry of
-folder_1.):
+If we register a utility which has only a relative path, the path is _not_
+stored and the utility is returned relative to the registry. (In the example we
+register folder_1/folder1_1/util in the registry of folder_1.):
 
     >>> folder1_1._setObject('util', SITestUtility('util'), set_owner=False)
     'util'

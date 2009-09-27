@@ -47,7 +47,7 @@ def make_objectmanager_site(obj):
     """
     make_site(obj, IObjectManagerSite)
 
-# Zope 3 version: zope.site.site._findNextSiteManager
+# Original version: zope.site.site._findNextSiteManager
 def find_next_sitemanager(site):
     """Find the closest sitemanager that is not the specified site's
     sitemanager.
@@ -72,7 +72,7 @@ def update_sitemanager_bases(site):
     sm = site.getSiteManager()
     sm.__bases__ = (next, )
 
-# Zope 3 version: zope.site.site.changeSiteConfigurationAfterMove
+# Original version: zope.site.site.changeSiteConfigurationAfterMove
 def update_sitemanager_bases_handler(site, event):
     """After a site is moved, its site manager links have to be updated."""
     if event.newParent is not None:

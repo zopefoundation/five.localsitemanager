@@ -263,7 +263,7 @@ exception otherwise:
 
 When we query the utility, it is returned with its original context:
 
-    >>> si_util = sitemanager_a.getUtility(ITestUtility, name='with_aq_chain')
+    >>> si_util = sitemanager_a.getUtility(ITestUtility, name=u'with_aq_chain')
     >>> si_util
     <SITestUtility at /a/b/si_util>
     >>> si_util.getPhysicalPath()
@@ -273,7 +273,7 @@ When we query the utility, it is returned with its original context:
     >>> si_util.absolute_url()
     'a/b/si_util'
 
-    >>> zope.component.getUtility(ITestUtility, name='with_aq_chain')
+    >>> zope.component.getUtility(ITestUtility, name=u'with_aq_chain')
     <SITestUtility at /a/b/si_util>
 
 If we move a registered component (which has an absolute path) to new
@@ -289,15 +289,15 @@ again:
     ...     self.app.a.b.c.si_util_cped,
     ...     name=u'with_aq_chain',
     ...     provided=ITestUtility)
-    >>> zope.component.getUtility(ITestUtility, name='with_aq_chain')
+    >>> zope.component.getUtility(ITestUtility, name=u'with_aq_chain')
     <SITestUtility at /a/b/c/si_util_cped>
 
 And just to mix things up a bit. Getting back multiple utilities
 should allow us to test aq, non-aq based components and components
-having an absolute aqusition path.
+having an absolute Acquisition path.
 
 First we have to register aq and non-aq based components in our
-registry (a component having an absolute aqusition path already exists):
+registry (a component having an absolute Acquisition path already exists):
 
     >>> sitemanager_a.registerUtility(AQTestUtility('test'),
     ...                               name=u'aq_wrapped',

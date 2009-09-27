@@ -233,14 +233,16 @@ class PersistentComponents(PersistentComponents, ObjectManager):
             provided = _getUtilityProvided(component)
 
         reg = self._utility_registrations.get((provided, name))
-        if reg is not None and reg[:2] == (component, info):
-            # already registered
-            if isinstance(reg[0], ComponentPathWrapper):
-                self.utilities.unsubscribe((), provided, reg[0])
-                # update path
-                reg[0].path = component.getPhysicalPath()
-                self.utilities.subscribe((), provided, reg[0])
-            return
+        if reg is not None:
+            if reg[:2] == (component, info):
+                # already registered
+                if isinstance(reg[0], ComponentPathWrapper):
+                    # update path
+                    self.utilities.unsubscribe((), provided, reg[0])
+                    reg[0].path = component.getPhysicalPath()
+                    self.utilities.subscribe((), provided, reg[0])
+                return
+            self.unregisterUtility(reg[0], provided, name)
 
         subscribed = False
         for ((p, _), data) in self._utility_registrations.iteritems():
@@ -249,12 +251,12 @@ class PersistentComponents(PersistentComponents, ObjectManager):
                 break
 
         wrapped_component = component
-        if hasattr(component, 'aq_parent'):
+        if getattr(component, 'aq_parent', None) is not None:
             # component is acquisition wrapped, so try to store path
-            if not hasattr(component, 'getPhysicalPath'):
+            if getattr(component, 'getPhysicalPath', None) is None:
                 raise AttributeError(
                     'Component %r does not implement getPhysicalPath, '
-                    'so register it unwrapped or implement this method.' % 
+                    'so register it unwrapped or implement this method.' %
                     component)
             path = component.getPhysicalPath()
             # If the path is relative we can't store it because we
@@ -264,6 +266,7 @@ class PersistentComponents(PersistentComponents, ObjectManager):
                 # We have an absolute path, so we can store it.
                 wrapped_component = ComponentPathWrapper(
                     Acquisition.aq_base(component), path)
+
         self._utility_registrations[(provided, name)] = (
             wrapped_component, info, factory)
         self.utilities.register((), provided, name, wrapped_component)
@@ -276,4 +279,3 @@ class PersistentComponents(PersistentComponents, ObjectManager):
                     UtilityRegistration(
                         self, provided, name, component, info, factory)
                     ))
-        

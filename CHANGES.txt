@@ -4,6 +4,11 @@ Changelog
 2.0dev - unreleased
 -------------------
 
+* Updated forked registerUtility method to match the zope.component 3.7.1
+  code base. This fixes the two bugs with the implicit unregistration of
+  utilities for existing interface / name pairs.
+  [hannosch]
+
 * Simplified some code, aq_parent now respects __parent__ pointers.
   [hannosch]
 

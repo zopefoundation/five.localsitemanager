@@ -17,7 +17,6 @@ $Id$
 
 from Acquisition import aq_base
 from zope.component.globalregistry import base
-from zope.traversing.interfaces import IContainmentRoot
 from zope.location.interfaces import ISite
 from five.localsitemanager.registry import PersistentComponents
 from five.localsitemanager.utils import get_parent
@@ -54,14 +53,8 @@ def find_next_sitemanager(site):
     sitemanager.
     """
     while True:
-        if IContainmentRoot.providedBy(site):
-            # we're the root site, return None
-            return None
-
-        try:
-            site = get_parent(site)
-        except TypeError:
-            # there was not enough context; probably run from a test
+        site = get_parent(site, default=None)
+        if site is None:
             return None
 
         if ISite.providedBy(site):

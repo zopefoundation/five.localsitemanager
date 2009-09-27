@@ -4,6 +4,8 @@ Changelog
 2.0dev - unreleased
 -------------------
 
+* Simplified some code, aq_parent now respects __parent__ pointers.
+  [hannosch]
 
 2.0a1 - 2009-05-27
 ------------------

@@ -17,10 +17,9 @@ $Id$
 
 import Acquisition
 import persistent
-import OFS.ObjectManager
 from Acquisition.interfaces import IAcquirer
+from OFS.ObjectManager import ObjectManager
 from zope.location.interfaces import ISite
-from zope.component.persistentregistry import PersistentAdapterRegistry
 from zope.component.persistentregistry import PersistentComponents
 from zope.component.registry import UtilityRegistration, _getUtilityProvided
 from zope.interface.adapter import VerifyingAdapterLookup
@@ -114,6 +113,7 @@ def _recurse_to_site(current, wanted):
         current = _recurse_to_site(get_parent(current), wanted)
     return current
 
+
 def _wrap(comp, registry):
     """Return an aq wrapped component with the site as the parent but
     only if the comp has an aq wrapper to begin with.
@@ -182,18 +182,16 @@ def _rewrap(obj):
 
 
 class ComponentPathWrapper(persistent.Persistent):
-    
+
     def __init__(self, component, path):
         self.component = component
         self.path = path
 
     def __eq__(self, other):
         return self.component == other
-    
 
-class PersistentComponents \
-          (PersistentComponents,
-           OFS.ObjectManager.ObjectManager):
+
+class PersistentComponents(PersistentComponents, ObjectManager):
     """An implementation of a component registry that can be persisted
     and looks like a standard ObjectManager.  It also ensures that all
     utilities have the the parent of this site manager (which should be

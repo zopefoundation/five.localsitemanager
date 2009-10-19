@@ -61,6 +61,25 @@ been configured.
     >>> zope.component.queryUtility(ITestUtility, name=u'hello_world')
     <Utility TestUtility "test">
 
+You can unregister a registered utility:
+
+    >>> sitemanager.registerUtility(TestUtility('test_to_be_removed'),
+    ...                             name='to_remove',
+    ...                             provided=ITestUtility)
+
+    >>> utility = sitemanager.getUtility(ITestUtility, name='to_remove')
+    >>> utility
+    <Utility TestUtility "test_to_be_removed">
+
+    >>> sitemanager.unregisterUtility(utility, name='to_remove')
+    True
+
+    >>> sitemanager.getUtility(ITestUtility, name='to_remove')
+    Traceback (most recent call last):
+       ...
+    ComponentLookupError: (<InterfaceClass ...ITestUtility>, 'to_remove')
+
+
 Adapters
 ---------
 
@@ -108,7 +127,7 @@ Acquisition
 -----------
 
 Now to mix a little required Zope 2 confusion into everything, we must ensure
-that the aq chain is predictable. 
+that the aq chain is predictable.
 
 Path relative to component registry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -210,6 +229,28 @@ And registeredUtilities():
     >>> comp = aqutils[0]
     >>> Acquisition.aq_parent(comp) is site
     True
+
+And finally unregisterUtility():
+
+    >>> sitemanager.registerUtility(AQTestUtility('aq_to_remove'),
+    ...                             name=u'aq_to_remove',
+    ...                             provided=ITestUtility)
+
+    >>> utility = sitemanager.getUtility(ITestUtility, name='aq_to_remove')
+    >>> utility
+    <Utility AQTestUtility "aq_to_remove">
+
+    >>> sitemanager.unregisterUtility(utility,
+    ...                               provided=ITestUtility,
+    ...                               name='aq_to_remove')
+    True
+
+    >>> sitemanager.getUtility(ITestUtility, name='aq_to_remove')
+    Traceback (most recent call last):
+       ...
+    ComponentLookupError: (<InterfaceClass ...ITestUtility>, 'aq_to_remove')
+
+
 
 Absolute Path
 ~~~~~~~~~~~~~
@@ -317,7 +358,7 @@ We start with getUtilitiesFor():
     >>> len(aqutils)
     2
     >>> aqutils
-    [(u'aq_wrapped', <Utility AQTestUtility "test">), 
+    [(u'aq_wrapped', <Utility AQTestUtility "test">),
      (u'with_aq_chain', <SITestUtility at /a/b/c/si_util_cped>)]
 
 And then getAllUtilitiesRegisteredFor():
@@ -343,8 +384,8 @@ And then getAllUtilitiesRegisteredFor():
 And registeredUtilities():
 
     >>> list(sitemanager_a.registeredUtilities())
-    [UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'with_aq_chain', si_util_cped,... u''),
-     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">,... u''),
+    [UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">,... u''),
+     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'with_aq_chain', si_util_cped,... u''),
      UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'hello_world', <Utility TestUtility "test">,... u'')]
 
     >>> utils = [r.component for r in sitemanager_a.registeredUtilities()]
@@ -362,7 +403,32 @@ And registeredUtilities():
     >>> len(aqutils)
     2
     >>> aqutils
-    [<SITestUtility at /a/b/c/si_util_cped>, <Utility AQTestUtility "test">]
+    [<Utility AQTestUtility "test">, <SITestUtility at /a/b/c/si_util_cped>]
+
+And unregisterUtility():
+
+    >>> si_to_remove = self.app.a.b._setObject('si_to_remove',
+    ...                                        SITestUtility('si_to_remove'))
+    >>> sitemanager_a.registerUtility(self.app.a.b.si_to_remove,
+    ...                               name=u'with_aq_chain_to_remove',
+    ...                               provided=ITestUtility)
+
+    >>> utility = sitemanager_a.getUtility(ITestUtility,
+    ...                                    name='with_aq_chain_to_remove')
+    >>> utility
+    <SITestUtility at /a/b/si_to_remove>
+
+    >>> sitemanager_a.unregisterUtility(utility,
+    ...                                 provided=ITestUtility,
+    ...                                 name='with_aq_chain_to_remove')
+    True
+
+    >>> sitemanager_a.getUtility(ITestUtility,
+    ...                          name='with_aq_chain_to_remove')
+    Traceback (most recent call last):
+       ...
+    ComponentLookupError: (<InterfaceClass ...ITestUtility>, 'with_aq_chain_to_remove')
+
 
 Nested Sites
 ------------

@@ -1,5 +1,3 @@
-"""Setup for five.localsitemanager package
-"""
 from setuptools import setup
 
 version = '2.0.1dev'

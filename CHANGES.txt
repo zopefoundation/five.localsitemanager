@@ -4,7 +4,11 @@ Changelog
 2.0.1 - Unreleased
 ------------------
 
+* Adapt unregistering of components work to work with latest zope.component.
+  [hannosch]
 
+* Fix unregistering of components which have a physical path.
+  [thefunny42]
 
 2.0 - 2009-09-27
 ----------------
@@ -50,7 +54,6 @@ Changelog
 * Requiring zope.component >= 3.5.0.
   [icemac]
 
-
 1.0 - 2008-11-18
 ----------------
 
@@ -59,7 +62,7 @@ Changelog
   look-up is stored in the adapter look-up cache, subsequent utility
   look-ups return the utlitiy with the RequestContainer of the first
   look-up.
-  
+
   Solution: For utilities registered with an absolute path the
   RequestContainer is now also removed at look-up.
   [icemac]

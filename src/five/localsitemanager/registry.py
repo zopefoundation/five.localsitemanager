@@ -196,6 +196,9 @@ class ComponentPathWrapper(persistent.Persistent):
     def __eq__(self, other):
         return self.component == other
 
+    def __ne__(self, other):
+        return self.component != other
+
 
 class PersistentComponents(PersistentComponents, ObjectManager):
     """An implementation of a component registry that can be persisted
@@ -282,6 +285,29 @@ class PersistentComponents(PersistentComponents, ObjectManager):
 
         if event:
             zope.event.notify(zope.component.interfaces.Registered(
-                    UtilityRegistration(
-                        self, provided, name, component, info, factory)
-                    ))
+                UtilityRegistration(
+                    self, provided, name, component, info, factory)
+                ))
+
+    def unregisterUtility(self, component=None, provided=None, name=u'',
+                          factory=None):
+        if factory:
+            if component:
+                raise TypeError("Can't specify factory and component.")
+            component = factory()
+
+        if provided is None:
+            if component is None:
+                raise TypeError("Must specify one of component, factory and "
+                                "provided")
+            provided = _getUtilityProvided(component)
+
+        old = self._utility_registrations.get((provided, name))
+        if isinstance(old[0], ComponentPathWrapper):
+            # If the existing registration is a ComponentPathWrapper, we
+            # convert the component that is to be unregistered to a wrapper.
+            # This ensures that our custom comparision methods are called.
+            component = ComponentPathWrapper(Acquisition.aq_base(component),'')
+
+        return super(PersistentComponents, self).unregisterUtility(
+            component=component, provided=provided, name=name)

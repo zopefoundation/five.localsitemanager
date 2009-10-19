@@ -70,6 +70,25 @@ Utilities are also registrable as factory:
     >>> sitemanager.getUtility(ITestUtility, name=u'factory_test')
     <Utility TestUtility "factory_test">
 
+You can unregister a registered utility:
+
+    >>> sitemanager.registerUtility(TestUtility('test_to_be_removed'),
+    ...                             name='to_remove',
+    ...                             provided=ITestUtility)
+
+    >>> utility = sitemanager.getUtility(ITestUtility, name='to_remove')
+    >>> utility
+    <Utility TestUtility "test_to_be_removed">
+
+    >>> sitemanager.unregisterUtility(utility, name='to_remove')
+    True
+
+    >>> sitemanager.getUtility(ITestUtility, name='to_remove')
+    Traceback (most recent call last):
+       ...
+    ComponentLookupError: (<InterfaceClass ...ITestUtility>, 'to_remove')
+
+
 Adapters
 ---------
 
@@ -219,6 +238,27 @@ And registeredUtilities():
     >>> Acquisition.aq_parent(comp) is site
     True
 
+And finally unregisterUtility():
+
+    >>> sitemanager.registerUtility(AQTestUtility('aq_to_remove'),
+    ...                             name=u'aq_to_remove',
+    ...                             provided=ITestUtility)
+
+    >>> utility = sitemanager.getUtility(ITestUtility, name='aq_to_remove')
+    >>> utility
+    <Utility AQTestUtility "aq_to_remove">
+
+    >>> sitemanager.unregisterUtility(utility,
+    ...                               provided=ITestUtility,
+    ...                               name='aq_to_remove')
+    True
+
+    >>> sitemanager.getUtility(ITestUtility, name='aq_to_remove')
+    Traceback (most recent call last):
+       ...
+    ComponentLookupError: (<InterfaceClass ...ITestUtility>, 'aq_to_remove')
+
+
 Absolute Path
 ~~~~~~~~~~~~~
 
@@ -323,7 +363,7 @@ We start with getUtilitiesFor():
     >>> len(aqutils)
     2
     >>> aqutils
-    [(u'aq_wrapped', <Utility AQTestUtility "test">), 
+    [(u'aq_wrapped', <Utility AQTestUtility "test">),
      (u'with_aq_chain', <SITestUtility at /a/b/c/si_util_cped>)]
 
 And then getAllUtilitiesRegisteredFor():
@@ -368,9 +408,34 @@ And registeredUtilities():
     >>> aqutils = [comp for comp in utils if IAcquirer.providedBy(comp)]
     >>> len(aqutils)
     2
+
     >>> sorted(aqutils, key=lambda x:x.id)
     [<SITestUtility at /a/b/c/si_util_cped>,
      <Utility AQTestUtility "test">]
+
+And unregisterUtility():
+
+    >>> si_to_remove = self.app.a.b._setObject('si_to_remove',
+    ...                                        SITestUtility('si_to_remove'))
+    >>> sitemanager_a.registerUtility(self.app.a.b.si_to_remove,
+    ...                               name=u'with_aq_chain_to_remove',
+    ...                               provided=ITestUtility)
+
+    >>> utility = sitemanager_a.getUtility(ITestUtility,
+    ...                                    name=u'with_aq_chain_to_remove')
+    >>> utility
+    <SITestUtility at /a/b/si_to_remove>
+
+    >>> sitemanager_a.unregisterUtility(utility,
+    ...                                 provided=ITestUtility,
+    ...                                 name=u'with_aq_chain_to_remove')
+    True
+
+    >>> sitemanager_a.getUtility(ITestUtility,
+    ...                          name=u'with_aq_chain_to_remove')
+    Traceback (most recent call last):
+       ...
+    ComponentLookupError: (<InterfaceClass ...ITestUtility>, u'with_aq_chain_to_remove')
 
 
 Nested Sites

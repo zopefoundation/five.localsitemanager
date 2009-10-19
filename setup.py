@@ -1,10 +1,6 @@
-"""Setup for five.localsitemanager package
+from setuptools import setup
 
-$Id$
-"""
-from setuptools import setup, Extension
-
-version = '1.2dev'
+version = '1.2'
 
 setup(name='five.localsitemanager',
       version=version,

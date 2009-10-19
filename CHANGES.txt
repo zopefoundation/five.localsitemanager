@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.2 - unreleased
+----------------
+
+* Fix unregistring of components which have a physical path.
+  [thefunny42]
+
 1.1 - 2009-06-19
 ----------------
 
@@ -22,7 +28,7 @@ Changelog
   look-up is stored in the adapter look-up cache, subsequent utility
   look-ups return the utlitiy with the RequestContainer of the first
   look-up.
-  
+
   Solution: For utilities registered with an absolute path the
   RequestContainer is now also removed at look-up.
   [icemac]

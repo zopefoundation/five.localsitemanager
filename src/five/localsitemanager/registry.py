@@ -165,14 +165,17 @@ def _rewrap(obj):
 
 
 class ComponentPathWrapper(persistent.Persistent):
-    
+
     def __init__(self, component, path):
         self.component = component
         self.path = path
 
     def __eq__(self, other):
         return self.component == other
-    
+
+    def __ne__(self, other):
+        return self.component != other
+
 
 class PersistentComponents \
           (PersistentComponents,
@@ -222,7 +225,7 @@ class PersistentComponents \
             if not hasattr(component, 'getPhysicalPath'):
                 raise AttributeError(
                     'Component %r does not implement getPhysicalPath, '
-                    'so register it unwrapped or implement this method.' % 
+                    'so register it unwrapped or implement this method.' %
                     component)
             path = component.getPhysicalPath()
             # If the path is relative we can't store it because we
@@ -242,4 +245,3 @@ class PersistentComponents \
             zope.event.notify(zope.component.interfaces.Registered(
                 UtilityRegistration(self, provided, name, component, info)
                 ))
-        

@@ -4,7 +4,7 @@ Changelog
 1.2 - unreleased
 ----------------
 
-* Fix unregistring of components which have a physical path.
+* Fix unregistering of components which have a physical path.
   [thefunny42]
 
 1.1 - 2009-06-19

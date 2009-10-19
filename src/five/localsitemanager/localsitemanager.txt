@@ -383,10 +383,10 @@ And then getAllUtilitiesRegisteredFor():
 
 And registeredUtilities():
 
-    >>> list(sitemanager_a.registeredUtilities())
+    >>> sorted(sitemanager_a.registeredUtilities())
     [UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">,... u''),
-     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'with_aq_chain', si_util_cped,... u''),
-     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'hello_world', <Utility TestUtility "test">,... u'')]
+     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'hello_world', <Utility TestUtility "test">,... u''),
+     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'with_aq_chain', si_util_cped,... u'')]
 
     >>> utils = [r.component for r in sitemanager_a.registeredUtilities()]
     >>> len(utils)
@@ -402,7 +402,7 @@ And registeredUtilities():
     >>> aqutils = [comp for comp in utils if IAcquirer.providedBy(comp)]
     >>> len(aqutils)
     2
-    >>> aqutils
+    >>> sorted(aqutils)
     [<Utility AQTestUtility "test">, <SITestUtility at /a/b/c/si_util_cped>]
 
 And unregisterUtility():

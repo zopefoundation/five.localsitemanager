@@ -88,6 +88,11 @@ You can unregister a registered utility:
        ...
     ComponentLookupError: (<InterfaceClass ...ITestUtility>, 'to_remove')
 
+Trying to unregister a utility that is not registered should return False.
+
+    >>> sitemanager.unregisterUtility(provided=ITestUtility)
+    False
+
 
 Adapters
 ---------

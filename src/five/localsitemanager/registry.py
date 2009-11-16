@@ -302,12 +302,15 @@ class PersistentComponents(PersistentComponents, ObjectManager):
                                 "provided")
             provided = _getUtilityProvided(component)
 
-        old = self._utility_registrations.get((provided, name))
-        if isinstance(old[0], ComponentPathWrapper):
-            # If the existing registration is a ComponentPathWrapper, we
-            # convert the component that is to be unregistered to a wrapper.
-            # This ensures that our custom comparision methods are called.
-            component = ComponentPathWrapper(Acquisition.aq_base(component),'')
-
+        # If the existing registration is a ComponentPathWrapper, we
+        # convert the component that is to be unregistered to a wrapper.
+        # This ensures that our custom comparision methods are called.
+        if component is not None:
+            old = self._utility_registrations.get((provided, name))
+            if old is not None:
+                if isinstance(old[0], ComponentPathWrapper):
+                    unwrapped_component = Acquisition.aq_base(component)
+                    component = ComponentPathWrapper(unwrapped_component,'')
+            
         return super(PersistentComponents, self).unregisterUtility(
             component=component, provided=provided, name=name)

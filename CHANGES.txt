@@ -4,6 +4,10 @@ Changelog
 2.0.2 - Unreleased
 ------------------
 
+* Fix regression in five.localsitemanager 2.0.1 where unregistering a utility
+  based on its provided interface broke if no utility was registered for that
+  interface.
+  [davisagli]
 
 2.0.1 - 2009-10-19
 ------------------

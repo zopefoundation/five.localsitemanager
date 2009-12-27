@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '2.0.2'
+version = '2.0.3dev'
 
 setup(name='five.localsitemanager',
       version=version,
@@ -29,17 +29,17 @@ setup(name='five.localsitemanager',
           test=['zope.testing']
           ),
       install_requires=[
-        'Acquisition',
-        'Zope2 >= 2.12.dev',
-        'ZODB3',
-        'setuptools',
-        'zope.component',
-        'zope.event',
-        'zope.interface',
-        'zope.location',
-        'zope.lifecycleevent >= 3.5.2',
-        'zope.site',
-        'zope.traversing',
-      ],
+          'Acquisition',
+          'ZODB3',
+          'setuptools',
+          'zope.component',
+          'zope.event',
+          'zope.interface',
+          'zope.location',
+          'zope.lifecycleevent',
+          'zope.site',
+          'zope.traversing',
+          'Zope2 >= 2.12.0',
+          ],
       zip_safe = False,
       )

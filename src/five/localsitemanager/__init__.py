@@ -15,6 +15,7 @@
 
 from Acquisition import aq_base
 from zope.component.globalregistry import base
+from zope.component.interfaces import ComponentLookupError
 from zope.location.interfaces import ISite
 from five.localsitemanager.registry import PersistentComponents
 from five.localsitemanager.utils import get_parent
@@ -74,4 +75,7 @@ def update_sitemanager_bases(site):
 def update_sitemanager_bases_handler(site, event):
     """After a site is moved, its site manager links have to be updated."""
     if event.newParent is not None:
-        update_sitemanager_bases(site)
+        try:
+            update_sitemanager_bases(site)
+        except ComponentLookupError:
+            pass

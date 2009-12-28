@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.0.3 - unreleased
+------------------
+
+* Made 'update_sitemanager_bases_handler' fail silently instead of raising an
+  error. This allows to import broken sites, in particular old CMF sites.
+  [yuppie]
+
 2.0.2 - 2009-11-15
 ------------------
 

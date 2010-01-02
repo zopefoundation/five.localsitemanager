@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.3 - unreleased
+2.0.3 - 2010-01-02
 ------------------
 
 * Made 'update_sitemanager_bases_handler' fail silently instead of raising an

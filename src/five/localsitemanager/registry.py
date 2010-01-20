@@ -170,7 +170,11 @@ def _wrap(comp, registry):
             # If the component happens to be the component registry
             # container we are looking up a ISiteRoot.
             # We are not wrapping it in itself but in its own parent
-            comp = base.__of__(Acquisition.aq_parent(parent))
+            site_parent = Acquisition.aq_parent(parent)
+            if site_parent is None:
+                raise ValueError('The ISiteRoot %s has no parent or the '
+                    'current site is not set correctly.' % repr(parent))
+            comp = base.__of__(site_parent)
 
     return comp
 

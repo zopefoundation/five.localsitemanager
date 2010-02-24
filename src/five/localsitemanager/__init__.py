@@ -76,4 +76,6 @@ def update_sitemanager_bases(site):
 
 
 def update_sitemanager_bases_handler(site, event):
-    update_sitemanager_bases(site)
+    """After a site is moved, its site manager links have to be updated."""
+    if event.newParent is not None:
+        update_sitemanager_bases(site)

@@ -3,6 +3,8 @@ Changelog
 
 1.3 - unreleased
 ----------------
+* Don't update bases if event is a Remove event
+  [do3cc]
 
 
 1.2 - 2009-10-19

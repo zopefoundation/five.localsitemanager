@@ -7,7 +7,7 @@ setup(name='five.localsitemanager',
       url='http://pypi.python.org/pypi/five.localsitemanager',
       license='ZPL 2.1',
       description='Local site manager implementation for Zope 2',
-      author='Rocky Burt and Contributors',
+      author='Zope Foundation and Contributors',
       author_email='zope-cmf@zope.org',
       long_description=open("README.txt").read() + "\n" + 
                        open("INSTALL.txt").read() + "\n" +

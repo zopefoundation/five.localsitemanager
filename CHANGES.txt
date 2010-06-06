@@ -4,6 +4,8 @@ Changelog
 2.0.4 - unreleased
 ------------------
 
+* Deal with deprecation warnings for Zope 2.13.
+
 * Provide a more meaningful error message if the current site is not set
   correctly or the Acquisition chain of the site is messed up.
   [hannosch]

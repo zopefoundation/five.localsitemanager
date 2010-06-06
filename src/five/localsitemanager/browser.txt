@@ -14,7 +14,13 @@ Load all of Five's configuration (this is a functional test):
 
     >>> import Products.Five
     >>> import five.localsitemanager
-    >>> from Products.Five.zcml import load_config, load_string
+
+    # BBB for Zope 2.12
+    >>> try:
+    ...     from Zope2.App.zcml import load_config, load_string
+    ... except ImportError:
+    ...     from Products.Five.zcml import load_config, load_string
+
     >>> load_config('configure.zcml', package=Products.Five)
     >>> load_config('configure.zcml', package=five.localsitemanager)
     >>> load_string('<includeOverrides package="five.localsitemanager" file="overrides.zcml" />')
@@ -32,7 +38,12 @@ User Set Up
 
 Create the test browser we'll be using:
 
-    >>> from Products.Five.testbrowser import Browser
+    # BBB for Zope 2.12
+    >>> try:
+    ...     from Testing.testbrowser import Browser
+    ... except ImportError:
+    ...     from Products.Five.testbrowser import Browser
+
     >>> browser = Browser()
     >>> browser.addHeader('Authorization', 'Basic admin:admin')
 

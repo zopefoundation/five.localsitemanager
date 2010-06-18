@@ -1,4 +1,4 @@
-from zope.traversing.interfaces import IContainmentRoot
+from zope.location.interfaces import IRoot
 
 from Acquisition import aq_parent, aq_inner
 
@@ -11,7 +11,7 @@ def get_parent(obj, default=_marker):
     Raises TypeError if the object doesn't have enough context to get the
     parent.
     """
-    if IContainmentRoot.providedBy(obj):
+    if IRoot.providedBy(obj):
         return None
 
     parent = aq_parent(aq_inner(obj))

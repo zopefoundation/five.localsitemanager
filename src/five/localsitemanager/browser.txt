@@ -52,10 +52,8 @@ Folder Set Up
 
 Make a folder to use as a local site for component registration:
 
-    >>> browser.open('http://localhost/manage_addProduct/OFSP/folderAdd')
-    >>> browser.getControl(name='id').value = 'folder'
-    >>> browser.getControl('Add').click()
-    >>> browser.getLink('folder').click()
+    >>> from OFS.Folder import manage_addFolder
+    >>> manage_addFolder(app, 'folder')
 
 Look up the ``components.html`` view and make sure the ``Make Site`` action
 still works.
@@ -71,10 +69,7 @@ registry.
 
 Now we add a sub folder.
 
-    >>> browser.open('http://localhost/folder/manage_addProduct/OFSP/folderAdd')
-    >>> browser.getControl(name='id').value = 'subfolder'
-    >>> browser.getControl('Add').click()
-    >>> browser.getLink('folder').click()
+    >>> manage_addFolder(app.folder, 'subfolder')
 
     >>> browser.open('http://localhost/folder/subfolder/components.html')
     >>> browser.getControl('Make site').click()

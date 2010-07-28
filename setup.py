@@ -1,10 +1,10 @@
 from setuptools import setup
 
-version = '1.3dev'
+version = '1.3'
 
 setup(name='five.localsitemanager',
       version=version,
-      url='http://svn.zope.org/five.localsitemanager',
+      url='http://pypi.python.org/pypi/five.localsitemanager',
       license='ZPL 2.1',
       description='Local site manager implementation for Zope 2',
       author='Rocky Burt and Contributors',

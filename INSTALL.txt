@@ -15,7 +15,7 @@ Installation
 Place the ``five`` top-level package into your instance's
 ``lib/python`` directory.  You can also install it as an egg using
 easy_install_, for example into your instance by turning it into a
-workingenv_.
+virtualenv_.
 
 
 Configuration
@@ -38,7 +38,7 @@ Use the following command to run this package's tests:
 
   $ bin/zopectl test -s five.localsitemanager
 
-.. _workingenv: http://cheeseshop.python.org/pypi/workingenv.py
+.. _virtualenv: http://pypi.python.org/pypi/virtualenv
 .. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
 .. _setuptools: http://peak.telecommunity.com/DevCenter/setuptools
 

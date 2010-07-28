@@ -19,7 +19,6 @@ setup(name='five.localsitemanager',
           'Operating System :: OS Independent',
           'Programming Language :: Python',
           'Topic :: Internet :: WWW/HTTP :: Site Management',
-          'Topic :: Software Development :: Libraries :: Python Modules',
       ],
       keywords='zope zope2 zope3 five sitemanager',
 

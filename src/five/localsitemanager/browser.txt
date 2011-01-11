@@ -34,7 +34,7 @@ User Set Up
 -----------
 
     >>> uf = app.acl_users
-    >>> uf._doAddUser('admin', 'admin', ['Manager'], [])
+    >>> _ignored = uf._doAddUser('admin', 'admin', ['Manager'], [])
 
 Create the test browser we'll be using:
 

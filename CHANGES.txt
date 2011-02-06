@@ -1,10 +1,10 @@
 Changelog
 =========
 
-2.0.5 - unreleased
+2.0.5 - 2011-02-06
 ------------------
 
-* Made the tests compatible with Zope 2.13.0a2.
+* Made the tests compatible with Zope 2.13.2.
 
 2.0.4 - 2010-06-13
 ------------------

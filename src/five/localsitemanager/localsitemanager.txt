@@ -9,10 +9,13 @@ We start from an empty folder. Since ``OFS.Folder``'s extend
 
 Of course we now need to transform that IPossibleSite into a real ISite.
 
-    >>> import zope.component
-    >>> from zope.site.hooks import setSite
-
-    >>> from zope.site.hooks import setHooks
+    # BBB: for Zope < 2.13 (zope.component < 3.8)
+    >>> try:
+    ...     from zope.component.hooks import setHooks
+    ...     from zope.component.hooks import setSite
+    ... except ImportError:
+    ...     from zope.site.hooks import setHooks
+    ...     from zope.site.hooks import setSite
     >>> setHooks()
 
     >>> from five.localsitemanager import make_objectmanager_site
@@ -52,6 +55,7 @@ setting up a test utility.
 Make sure the utility lookup only works when the correct active site has been
 configured.
 
+    >>> import zope.component
     >>> setSite()
     >>> zope.component.queryUtility(ITestUtility, name=u'hello_world') is None
     True

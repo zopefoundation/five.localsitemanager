@@ -13,14 +13,19 @@
 """Management view for local site manager.
 """
 
-from zope.site.hooks import setSite
-from zope.component.globalregistry import base
-from five.localsitemanager import make_objectmanager_site
-
 from Products.Five.component.browser import ObjectManagerSiteView
+from zope.component.globalregistry import base
+try:
+    from zope.component.hooks import setSite
+except ImportError:
+    # BBB: for Zope < 2.13 (zope.component < 3.8)
+    from zope.site.hooks import setSite
+
+from five.localsitemanager import make_objectmanager_site
 
 
 class ObjectManagerSiteView(ObjectManagerSiteView):
+
     """Configure the site setup for an ObjectManager.
     """
 

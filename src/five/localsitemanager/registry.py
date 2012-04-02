@@ -15,18 +15,23 @@
 
 import Acquisition
 import persistent
+import zope.component.interfaces
+import zope.event
 from Acquisition.interfaces import IAcquirer
 from OFS.ObjectManager import ObjectManager
-from zope.location.interfaces import ISite
+try:
+    from zope.component.hooks import getSite
+except ImportError:
+    # BBB: for Zope < 2.13 (zope.component < 3.8)
+    from zope.site.hooks import getSite
 from zope.component.persistentregistry import PersistentComponents
-from zope.component.registry import UtilityRegistration, _getUtilityProvided
-from zope.interface.adapter import VerifyingAdapterLookup
+from zope.component.registry import _getUtilityProvided
+from zope.component.registry import UtilityRegistration
 from zope.interface.adapter import _lookup
 from zope.interface.adapter import _lookupAll
 from zope.interface.adapter import _subscriptions
-from zope.site.hooks import getSite
-import zope.event
-import zope.component.interfaces
+from zope.interface.adapter import VerifyingAdapterLookup
+from zope.location.interfaces import ISite
 from ZPublisher.BaseRequest import RequestContainer
 
 from five.localsitemanager.utils import get_parent
@@ -96,7 +101,6 @@ class FiveVerifyingAdapterLookup(VerifyingAdapterLookup):
                 if extendors is None:
                     continue
 
-            tmp_result = []
             _subscriptions(byorder[order], required, extendors, u'',
                            result, 0, order)
             result = [ _wrap(r, registry) for r in result ]

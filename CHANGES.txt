@@ -4,6 +4,9 @@ Changelog
 2.0.6 - unreleased
 ------------------
 
+* Removed zope.site dependency. Using Zope 2.12 it is an indirect dependency
+  and using Zope 2.13 or later it is no longer required.
+  [yuppie]
 
 2.0.5 - 2011-02-06
 ------------------

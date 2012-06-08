@@ -14,8 +14,6 @@
 """
 
 from Acquisition import aq_base
-from Products.Five.component import enableSite
-from Products.Five.component.interfaces import IObjectManagerSite
 from zope.component.globalregistry import base
 from zope.component.interfaces import ComponentLookupError
 try:
@@ -26,6 +24,9 @@ except ImportError:
 
 from five.localsitemanager.registry import PersistentComponents
 from five.localsitemanager.utils import get_parent
+# BBB: for Zope < 2.13 this has to be imported at the end
+from Products.Five.component import enableSite
+from Products.Five.component.interfaces import IObjectManagerSite
 
 def make_site(obj, iface=ISite):
     """Give the specified object required qualities to identify it as a proper

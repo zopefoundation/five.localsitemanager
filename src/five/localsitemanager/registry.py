@@ -21,8 +21,10 @@ from Acquisition.interfaces import IAcquirer
 from OFS.ObjectManager import ObjectManager
 try:
     from zope.component.hooks import getSite
+    from zope.component.interfaces import ISite
 except ImportError:
     # BBB: for Zope < 2.13 (zope.component < 3.8)
+    from zope.location.interfaces import ISite
     from zope.site.hooks import getSite
 from zope.component.persistentregistry import PersistentComponents
 from zope.component.registry import _getUtilityProvided
@@ -31,12 +33,12 @@ from zope.interface.adapter import _lookup
 from zope.interface.adapter import _lookupAll
 from zope.interface.adapter import _subscriptions
 from zope.interface.adapter import VerifyingAdapterLookup
-from zope.location.interfaces import ISite
 from ZPublisher.BaseRequest import RequestContainer
 
 from five.localsitemanager.utils import get_parent
 
 _marker = object()
+
 
 class FiveVerifyingAdapterLookup(VerifyingAdapterLookup):
 
@@ -95,7 +97,7 @@ class FiveVerifyingAdapterLookup(VerifyingAdapterLookup):
                 continue
 
             if provided is None:
-                extendors = (provided, )
+                extendors = (provided,)
             else:
                 extendors = registry._v_lookup._extendors.get(provided)
                 if extendors is None:
@@ -209,6 +211,7 @@ class ComponentPathWrapper(persistent.Persistent):
 
 
 class PersistentComponents(PersistentComponents, ObjectManager):
+
     """An implementation of a component registry that can be persisted
     and looks like a standard ObjectManager.  It also ensures that all
     utilities have the the parent of this site manager (which should be
@@ -236,7 +239,7 @@ class PersistentComponents(PersistentComponents, ObjectManager):
 
     def registeredUtilities(self):
         for reg in super(PersistentComponents, self).registeredUtilities():
-            reg.component=_wrap(reg.component, self)
+            reg.component = _wrap(reg.component, self)
             yield reg
 
     def registerUtility(self, component=None, provided=None, name=u'', info=u'',
@@ -318,7 +321,7 @@ class PersistentComponents(PersistentComponents, ObjectManager):
             if old is not None:
                 if isinstance(old[0], ComponentPathWrapper):
                     unwrapped_component = Acquisition.aq_base(component)
-                    component = ComponentPathWrapper(unwrapped_component,'')
-            
+                    component = ComponentPathWrapper(unwrapped_component, '')
+
         return super(PersistentComponents, self).unregisterUtility(
             component=component, provided=provided, name=name)

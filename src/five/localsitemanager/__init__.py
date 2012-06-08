@@ -14,14 +14,18 @@
 """
 
 from Acquisition import aq_base
+from Products.Five.component import enableSite
+from Products.Five.component.interfaces import IObjectManagerSite
 from zope.component.globalregistry import base
 from zope.component.interfaces import ComponentLookupError
-from zope.location.interfaces import ISite
+try:
+    from zope.component.interfaces import ISite
+except ImportError:
+    # BBB: for Zope < 2.13 (zope.component < 3.8)
+    from zope.location.interfaces import ISite
+
 from five.localsitemanager.registry import PersistentComponents
 from five.localsitemanager.utils import get_parent
-from Products.Five.component.interfaces import IObjectManagerSite
-from Products.Five.component import enableSite
-
 
 def make_site(obj, iface=ISite):
     """Give the specified object required qualities to identify it as a proper
@@ -69,7 +73,7 @@ def update_sitemanager_bases(site):
     if next is None:
         next = base
     sm = site.getSiteManager()
-    sm.__bases__ = (next, )
+    sm.__bases__ = (next,)
 
 # Original version: zope.site.site.changeSiteConfigurationAfterMove
 def update_sitemanager_bases_handler(site, event):

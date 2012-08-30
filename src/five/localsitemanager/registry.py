@@ -18,6 +18,7 @@ import persistent
 import zope.component.interfaces
 import zope.event
 from Acquisition.interfaces import IAcquirer
+from OFS.Application import Application
 from OFS.ObjectManager import ObjectManager
 try:
     from zope.component.hooks import getSite
@@ -29,11 +30,12 @@ except ImportError:
 from zope.component.persistentregistry import PersistentComponents
 from zope.component.registry import _getUtilityProvided
 from zope.component.registry import UtilityRegistration
+from zope.interface import implements
 from zope.interface.adapter import _lookup
 from zope.interface.adapter import _lookupAll
 from zope.interface.adapter import _subscriptions
 from zope.interface.adapter import VerifyingAdapterLookup
-from ZPublisher.BaseRequest import RequestContainer
+from zope.location.interfaces import IContained
 
 from five.localsitemanager.utils import get_parent
 
@@ -192,7 +194,7 @@ def _rewrap(obj):
     obj = Acquisition.aq_inner(obj)
     base = Acquisition.aq_base(obj)
     parent = Acquisition.aq_parent(obj)
-    if parent is None or isinstance(parent, RequestContainer):
+    if parent is None or isinstance(parent, Application):
         return base
     return base.__of__(_rewrap(parent))
 
@@ -217,6 +219,8 @@ class PersistentComponents(PersistentComponents, ObjectManager):
     utilities have the the parent of this site manager (which should be
     the ISite) as their acquired parent.
     """
+
+    implements(IContained)
 
     def _init_registries(self):
         super(PersistentComponents, self)._init_registries()

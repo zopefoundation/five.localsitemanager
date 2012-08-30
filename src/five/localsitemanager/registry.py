@@ -192,7 +192,7 @@ def _rewrap(obj):
     obj = Acquisition.aq_inner(obj)
     base = Acquisition.aq_base(obj)
     parent = Acquisition.aq_parent(obj)
-    if not parent or isinstance(parent, RequestContainer):
+    if parent is None or isinstance(parent, RequestContainer):
         return base
     return base.__of__(_rewrap(parent))
 

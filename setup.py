@@ -28,6 +28,7 @@ setup(name='five.localsitemanager',
       install_requires=[
           'Acquisition',
           'ZODB3',
+          'five.globalrequest',
           'setuptools',
           'zope.component',
           'zope.event',

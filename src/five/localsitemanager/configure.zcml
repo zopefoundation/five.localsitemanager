@@ -2,6 +2,8 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
+  <include package="five.globalrequest" />
+
   <subscriber
       for="Products.Five.component.interfaces.IObjectManagerSite
            zope.lifecycleevent.interfaces.IObjectMovedEvent"

@@ -317,7 +317,8 @@ When we query the utility, it is returned with its original context:
     >>> si_util.getPhysicalPath()
     ('', 'a', 'b', 'si_util')
     >>> si_util.aq_chain
-    [<SITestUtility at /a/b/si_util>, <Folder at /a/b>, <Folder at /a>, <Application at >]
+    [<SITestUtility at /a/b/si_util>, <Folder at /a/b>, <Folder at /a>, <Application at >,
+     <five.localsitemanager.registry.GlobalRequestContainer object at ...>]
     >>> si_util.absolute_url()
     'a/b/si_util'
 

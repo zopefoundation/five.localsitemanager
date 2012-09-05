@@ -29,6 +29,7 @@ except ImportError:
 from zope.component.persistentregistry import PersistentComponents
 from zope.component.registry import _getUtilityProvided
 from zope.component.registry import UtilityRegistration
+from zope.globalrequest import getRequest
 from zope.interface.adapter import _lookup
 from zope.interface.adapter import _lookupAll
 from zope.interface.adapter import _subscriptions
@@ -38,6 +39,18 @@ from ZPublisher.BaseRequest import RequestContainer
 from five.localsitemanager.utils import get_parent
 
 _marker = object()
+
+
+class GlobalRequestContainer(RequestContainer):
+    @property
+    def REQUEST(self):
+        request = getRequest()
+        if request is None:
+            raise AttributeError('REQUEST')
+        return request
+
+
+_GlobalRequestContainerInstance = GlobalRequestContainer()
 
 
 class FiveVerifyingAdapterLookup(VerifyingAdapterLookup):
@@ -192,8 +205,10 @@ def _rewrap(obj):
     obj = Acquisition.aq_inner(obj)
     base = Acquisition.aq_base(obj)
     parent = Acquisition.aq_parent(obj)
-    if parent is None or isinstance(parent, RequestContainer):
+    if parent is None:
         return base
+    if isinstance(parent, RequestContainer):
+        parent = _GlobalRequestContainerInstance
     return base.__of__(_rewrap(parent))
 
 

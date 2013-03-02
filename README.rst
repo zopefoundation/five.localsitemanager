@@ -12,6 +12,6 @@ been made to ease the path with CMF.
 Developer Resources
 -------------------
 
-- Subversion browser:
+- Source code:
 
-  http://svn.zope.org/five.localsitemanager
+  https://github.com/zopefoundation/five.localsitemanager

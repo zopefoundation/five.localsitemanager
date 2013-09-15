@@ -4,6 +4,9 @@ Changelog
 2.0.6 - unreleased
 ------------------
 
+* Don't complain if the site root has no Acquisition parent.
+  [davisagli]
+
 * Removed zope.site dependency. Using Zope 2.12 it is an indirect dependency
   and using Zope 2.13 or later it is no longer required.
   [yuppie]

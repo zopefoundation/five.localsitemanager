@@ -5,7 +5,7 @@ __version__ = '2.0.6dev'
 setup(
     name='five.localsitemanager',
     version=__version__,
-    url='http://pypi.python.org/pypi/five.localsitemanager',
+    url='https://pypi.python.org/pypi/five.localsitemanager',
     license='ZPL 2.1',
     description='Local site manager implementation for Zope.',
     author='Zope Foundation and Contributors',
@@ -18,6 +18,7 @@ setup(
         'License :: OSI Approved :: Zope Public License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
         'Topic :: Internet :: WWW/HTTP :: Site Management',
     ],
     keywords='zope five sitemanager',
@@ -37,5 +38,5 @@ setup(
         'zope.testing',
         'Zope2 >= 2.12.0',
     ],
-    zip_safe = False,
+    zip_safe=False,
 )

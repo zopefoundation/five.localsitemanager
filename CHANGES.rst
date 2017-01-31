@@ -11,6 +11,11 @@ Changelog
   and using Zope 2.13 or later it is no longer required.
   [yuppie]
 
+* Ensure that the PersistentComponents has no aquisition wrapper before passing
+  to the superclass, to allow the caching of component roots in zope.interface
+  to make a weakref to this root.
+  [MatthewWilkes]
+
 2.0.5 - 2011-02-06
 ------------------
 

@@ -322,6 +322,8 @@ class PersistentComponents(PersistentComponents, ObjectManager):
                 if isinstance(old[0], ComponentPathWrapper):
                     unwrapped_component = Acquisition.aq_base(component)
                     component = ComponentPathWrapper(unwrapped_component, '')
-
-        return super(PersistentComponents, self).unregisterUtility(
+        # Unwrap the utility before continuing to super to allow zope.interface
+        # to cache the component root
+        component_root = Acquisition.aq_base(self)
+        return super(PersistentComponents, component_root).unregisterUtility(
             component=component, provided=provided, name=name)

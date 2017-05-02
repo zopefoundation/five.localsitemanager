@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.6 - unreleased
+2.0.6 - 2017-05-02
 ------------------
 
 * Don't complain if the site root has no Acquisition parent.

@@ -1,9 +1,10 @@
 language: python
 python:
     - 2.7
+    - 3.5
 install:
-    - python bootstrap.py
-    - bin/buildout
+    - pip install zc.buildout
+    - buildout
 script:
     - bin/test -v1
 notifications:

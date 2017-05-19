@@ -223,10 +223,19 @@ And then getAllUtilitiesRegisteredFor():
 
 And registeredUtilities():
 
-    >>> sorted(sitemanager.registeredUtilities(), key=lambda x:x.name)
-    [UtilityRegistration(<PersistentComponents site>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">, None, u''),
-     UtilityRegistration(<PersistentComponents site>, ITestUtility, u'factory_test', <Utility TestUtility "factory_test">, <function test_utility_factory at 0x...>, u''),
-     UtilityRegistration(<PersistentComponents site>, ITestUtility, u'hello_world', <Utility TestUtility "test">, None, u'')]
+    >>> regs = sorted(sitemanager.registeredUtilities(), key=lambda x:x.name)
+    >>> [x.registry is sitemanager for x in regs]
+    [True, True, True]
+    >>> [x.provided is ITestUtility for x in regs]
+    [True, True, True]
+    >>> [str(x.name) for x in regs]
+    ['aq_wrapped', 'factory_test', 'hello_world']
+    >>> [x.component for x in regs]
+    [<Utility AQTestUtility "test">, <Utility TestUtility "factory_test">, <Utility TestUtility "test">]
+    >>> [x.factory for x in regs]
+    [None, <function test_utility_factory at 0x...>, None]
+    >>> [str(x.info) for x in regs]
+    ['', '', '']
 
     >>> utils = [ r.component for r in sitemanager.registeredUtilities() ]
     >>> len(utils)
@@ -354,7 +363,7 @@ our registry (a component having an absolute Acquisition path already exists):
 
 We start with getUtilitiesFor():
 
-    >>> utils = [x for x in sitemanager_a.getUtilitiesFor(ITestUtility)]
+    >>> utils = sorted([x for x in sitemanager_a.getUtilitiesFor(ITestUtility)])
     >>> len(utils)
     3
 
@@ -366,13 +375,13 @@ We start with getUtilitiesFor():
     >>> Acquisition.aq_parent(comp) is None
     True
 
-    >>> aqutils = [(name, comp)
+    >>> aqutils = [(str(name), comp)
     ...            for name, comp in utils if IAcquirer.providedBy(comp)]
     >>> len(aqutils)
     2
     >>> aqutils
-    [(u'aq_wrapped', <Utility AQTestUtility "test">),
-     (u'with_aq_chain', <SITestUtility at /a/b/c/si_util_cped>)]
+    [('aq_wrapped', <Utility AQTestUtility "test">),
+     ('with_aq_chain', <SITestUtility at /a/b/c/si_util_cped>)]
 
 And then getAllUtilitiesRegisteredFor():
 
@@ -397,10 +406,19 @@ And then getAllUtilitiesRegisteredFor():
 
 And registeredUtilities():
 
-    >>> sorted(sitemanager_a.registeredUtilities(), key=lambda x:x.name)
-    [UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'aq_wrapped', <Utility AQTestUtility "test">, None, u''), 
-     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'hello_world', <Utility TestUtility "test">, None, u''),
-     UtilityRegistration(<PersistentComponents /a>, ITestUtility, u'with_aq_chain', si_util_cped, None, u'')]
+    >>> regs = sorted(sitemanager_a.registeredUtilities(), key=lambda x:x.name)
+    >>> [x.registry is sitemanager_a for x in regs]
+    [True, True, True]
+    >>> [x.provided is ITestUtility for x in regs]
+    [True, True, True]
+    >>> [str(x.name) for x in regs]
+    ['aq_wrapped', 'hello_world', 'with_aq_chain']
+    >>> [x.component for x in regs]
+    [<Utility AQTestUtility "test">, <Utility TestUtility "test">, <SITestUtility at /a/b/c/si_util_cped>]
+    >>> [x.factory for x in regs]
+    [None, None, None]
+    >>> [str(x.info) for x in regs]
+    ['', '', '']
 
     >>> utils = [r.component for r in sitemanager_a.registeredUtilities()]
     >>> len(utils)

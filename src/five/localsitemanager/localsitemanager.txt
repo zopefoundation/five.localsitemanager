@@ -40,11 +40,11 @@ setting up a test utility.
 
     >>> class ITestUtility(interface.Interface): pass
     >>> class TestUtility(object):
-    ...     interface.implements(ITestUtility)
     ...     def __init__(self, id):
     ...         self.id = id
     ...     def __repr__(self):
     ...         return '<Utility %s "%s">' % (self.__class__.__name__, self.id)
+    >>> TestUtility = interface.implementer(ITestUtility)(TestUtility)
 
     >>> sitemanager.registerUtility(TestUtility('test'),
     ...                             name=u'hello_world',
@@ -109,18 +109,18 @@ setting up a test adapter.
 
     >>> class IFoo(interface.Interface): pass
     >>> class Foo(object):
-    ...     interface.implements(IFoo)
     ...     def __init__(self, id):
     ...         self.id = id
+    >>> Foo = interface.implementer(IFoo)(Foo)
 
     >>> class ITestAdapter(interface.Interface): pass
     >>> class TestAdapter(object):
-    ...     interface.implements(ITestAdapter)
     ...     def __init__(self, context):
     ...         self.context = context
     ...     def __repr__(self):
     ...         return '<Adapter %s adapting "%s">' % (self.__class__.__name__,
     ...                                                self.context.id)
+    >>> TestAdapter = interface.implementer(ITestAdapter)(TestAdapter)
 
     >>> sitemanager.registerAdapter(TestAdapter,
     ...                             required=(IFoo,),

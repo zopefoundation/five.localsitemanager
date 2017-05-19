@@ -80,13 +80,13 @@ class FiveVerifyingAdapterLookup(VerifyingAdapterLookup):
             components = byorder[order]
             tmp_result = {}
             _lookupAll(components, required, extendors, tmp_result, 0, order)
-            for k, v in tmp_result.iteritems():
+            for k, v in six.iteritems(tmp_result):
                 tmp_result[k] = _wrap(v, registry)
             result.update(tmp_result)
 
         self._subscribe(*required)
 
-        return tuple(result.iteritems())
+        return tuple(six.iteritems(result))
 
     def _uncached_subscriptions(self, required, provided):
         order = len(required)
@@ -265,7 +265,7 @@ class PersistentComponents(PersistentComponents, ObjectManager):
             self.unregisterUtility(reg[0], provided, name)
 
         subscribed = False
-        for ((p, _), data) in self._utility_registrations.iteritems():
+        for ((p, _), data) in six.iteritems(self._utility_registrations):
             if p == provided and data[0] == component:
                 subscribed = True
                 break

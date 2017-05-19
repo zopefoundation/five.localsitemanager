@@ -1,6 +1,8 @@
 Local Site Manager
 ==================
 
+    >>> from zope.interface.interfaces import ComponentLookupError
+
 We start from an empty folder. Since ``OFS.Folder``'s extend
 ``ObjectSiteManager`` they all get to be ``IPossibleSite``'s.
 
@@ -87,10 +89,11 @@ You can unregister a registered utility:
     >>> sitemanager.unregisterUtility(utility, name='to_remove')
     True
 
-    >>> sitemanager.getUtility(ITestUtility, name='to_remove')
-    Traceback (most recent call last):
-       ...
-    ComponentLookupError: (<InterfaceClass ...ITestUtility>, 'to_remove')
+    >>> try:
+    ...     sitemanager.getUtility(ITestUtility, name='to_remove')
+    ... except Exception as e:
+    ...     isinstance(e, ComponentLookupError)
+    True
 
 Trying to unregister a utility that is not registered should return False.
 
@@ -262,10 +265,11 @@ And finally unregisterUtility():
     ...                               name='aq_to_remove')
     True
 
-    >>> sitemanager.getUtility(ITestUtility, name='aq_to_remove')
-    Traceback (most recent call last):
-       ...
-    ComponentLookupError: (<InterfaceClass ...ITestUtility>, 'aq_to_remove')
+    >>> try:
+    ...     sitemanager.getUtility(ITestUtility, name='aq_to_remove')
+    ... except Exception as e:
+    ...     isinstance(e, ComponentLookupError)
+    True
 
 
 Absolute Path
@@ -440,11 +444,12 @@ And unregisterUtility():
     ...                                 name=u'with_aq_chain_to_remove')
     True
 
-    >>> sitemanager_a.getUtility(ITestUtility,
-    ...                          name=u'with_aq_chain_to_remove')
-    Traceback (most recent call last):
-       ...
-    ComponentLookupError: (<InterfaceClass ...ITestUtility>, u'with_aq_chain_to_remove')
+    >>> try:
+    ...     sitemanager_a.getUtility(ITestUtility,
+    ...                              name=u'with_aq_chain_to_remove')
+    ... except Exception as e:
+    ...     isinstance(e, ComponentLookupError)
+    True
 
 
 Nested Sites

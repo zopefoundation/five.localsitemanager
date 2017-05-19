@@ -1,6 +1,6 @@
 from setuptools import setup
 
-__version__ = '2.0.7.dev0'
+__version__ = '3.0.0.dev0'
 
 setup(
     name='five.localsitemanager',
@@ -18,7 +18,13 @@ setup(
         'License :: OSI Approved :: Zope Public License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Internet :: WWW/HTTP :: Site Management',
     ],
     keywords='zope five sitemanager',
@@ -30,6 +36,7 @@ setup(
         'Acquisition',
         'ZODB3',
         'setuptools',
+        'six',
         'zope.component',
         'zope.event',
         'zope.interface',

@@ -36,12 +36,12 @@ setting up a test utility.
     >>> from zope import interface
 
     >>> class ITestUtility(interface.Interface): pass
-    >>> class TestUtility(object):
+    >>> @interface.implementer(ITestUtility)
+    ... class TestUtility(object):
     ...     def __init__(self, id):
     ...         self.id = id
     ...     def __repr__(self):
     ...         return '<Utility %s "%s">' % (self.__class__.__name__, self.id)
-    >>> TestUtility = interface.implementer(ITestUtility)(TestUtility)
 
     >>> sitemanager.registerUtility(TestUtility('test'),
     ...                             name=u'hello_world',
@@ -106,19 +106,19 @@ setting up a test adapter.
     >>> from zope import interface
 
     >>> class IFoo(interface.Interface): pass
-    >>> class Foo(object):
+    >>> @interface.implementer(IFoo)
+    ... class Foo(object):
     ...     def __init__(self, id):
     ...         self.id = id
-    >>> Foo = interface.implementer(IFoo)(Foo)
 
     >>> class ITestAdapter(interface.Interface): pass
-    >>> class TestAdapter(object):
+    >>> @interface.implementer(ITestAdapter)
+    ... class TestAdapter(object):
     ...     def __init__(self, context):
     ...         self.context = context
     ...     def __repr__(self):
     ...         return '<Adapter %s adapting "%s">' % (self.__class__.__name__,
     ...                                                self.context.id)
-    >>> TestAdapter = interface.implementer(ITestAdapter)(TestAdapter)
 
     >>> sitemanager.registerAdapter(TestAdapter,
     ...                             required=(IFoo,),

@@ -9,6 +9,8 @@ parts
 
 __pycache__
 .installed.cfg
+.mr.developer.cfg
+.tox
 *.dll
 *.pyc
 *.pyo

@@ -1,10 +1,15 @@
 Changelog
 =========
 
-2.0.7 - unreleased
+3.0.0 - unreleased
 ------------------
 
-* TBD
+* Target use with Zope 4: no longer support 2.13.x.
+
+* Python 3 compatibility
+
+* added tox test scripts
+
 
 2.0.6 - 2017-05-02
 ------------------

@@ -15,11 +15,7 @@
 
 from Products.Five.component.browser import ObjectManagerSiteView
 from zope.component.globalregistry import base
-try:
-    from zope.component.hooks import setSite
-except ImportError:
-    # BBB: for Zope < 2.13 (zope.component < 3.8)
-    from zope.site.hooks import setSite
+from zope.component.hooks import setSite
 
 from five.localsitemanager import make_objectmanager_site
 

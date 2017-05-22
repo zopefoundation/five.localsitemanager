@@ -16,15 +16,10 @@
 from Acquisition import aq_base
 from zope.component.globalregistry import base
 from zope.component.interfaces import ComponentLookupError
-try:
-    from zope.component.interfaces import ISite
-except ImportError:
-    # BBB: for Zope < 2.13 (zope.component < 3.8)
-    from zope.location.interfaces import ISite
+from zope.component.interfaces import ISite
 
 from five.localsitemanager.registry import PersistentComponents
 from five.localsitemanager.utils import get_parent
-# BBB: for Zope < 2.13 this has to be imported at the end
 from Products.Five.component import enableSite
 from Products.Five.component.interfaces import IObjectManagerSite
 

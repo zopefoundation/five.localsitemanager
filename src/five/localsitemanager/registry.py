@@ -13,19 +13,16 @@
 """Component registry for local site manager.
 """
 
+import six
+
 import Acquisition
 import persistent
 import zope.component.interfaces
 import zope.event
 from Acquisition.interfaces import IAcquirer
 from OFS.ObjectManager import ObjectManager
-try:
-    from zope.component.hooks import getSite
-    from zope.component.interfaces import ISite
-except ImportError:
-    # BBB: for Zope < 2.13 (zope.component < 3.8)
-    from zope.location.interfaces import ISite
-    from zope.site.hooks import getSite
+from zope.component.hooks import getSite
+from zope.component.interfaces import ISite
 from zope.component.persistentregistry import PersistentComponents
 from zope.component.registry import _getUtilityProvided
 from zope.component.registry import UtilityRegistration
@@ -80,13 +77,13 @@ class FiveVerifyingAdapterLookup(VerifyingAdapterLookup):
             components = byorder[order]
             tmp_result = {}
             _lookupAll(components, required, extendors, tmp_result, 0, order)
-            for k, v in tmp_result.iteritems():
+            for k, v in six.iteritems(tmp_result):
                 tmp_result[k] = _wrap(v, registry)
             result.update(tmp_result)
 
         self._subscribe(*required)
 
-        return tuple(result.iteritems())
+        return tuple(six.iteritems(result))
 
     def _uncached_subscriptions(self, required, provided):
         order = len(required)
@@ -265,7 +262,7 @@ class PersistentComponents(PersistentComponents, ObjectManager):
             self.unregisterUtility(reg[0], provided, name)
 
         subscribed = False
-        for ((p, _), data) in self._utility_registrations.iteritems():
+        for ((p, _), data) in six.iteritems(self._utility_registrations):
             if p == provided and data[0] == component:
                 subscribed = True
                 break

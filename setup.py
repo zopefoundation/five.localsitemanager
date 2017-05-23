@@ -43,7 +43,7 @@ setup(
         'zope.location',
         'zope.lifecycleevent',
         'zope.testing',
-        'Zope2 > 4.0a4',
+        'Zope2 >= 4.0a5',
     ],
     zip_safe=False,
 )

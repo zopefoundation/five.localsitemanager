@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.0.0 - unreleased
+3.0.0 - 2017-05-23
 ------------------
 
 * Target use with Zope 4: no longer support 2.13.x.

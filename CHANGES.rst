@@ -4,6 +4,8 @@ Changelog
 3.0.1 (unreleased)
 ------------------
 
+* #4: Replace dependency on ZODB3 with persistent, add zope.site.
+
 
 3.0.0 - 2017-05-23
 ------------------

@@ -34,7 +34,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'Acquisition',
-        'ZODB3',
+        'persistent',
         'setuptools',
         'six',
         'zope.component',
@@ -42,6 +42,7 @@ setup(
         'zope.interface',
         'zope.location',
         'zope.lifecycleevent',
+        'zope.site',
         'zope.testing',
         'Zope2 >= 4.0a5',
     ],

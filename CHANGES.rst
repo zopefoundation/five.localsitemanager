@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.0.1 (unreleased)
+3.0.1 - 2017-05-27
 ------------------
 
 * #4: Replace dependency on ZODB3 with persistent, add zope.site.
@@ -14,7 +14,7 @@ Changelog
 
 * Python 3 compatibility
 
-* added tox test scripts
+* Added tox test scripts.
 
 
 2.0.6 - 2017-05-02

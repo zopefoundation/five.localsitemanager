@@ -4,6 +4,7 @@ from Acquisition import aq_parent, aq_inner
 
 _marker = object()
 
+
 def get_parent(obj, default=_marker):
     """Returns the container the object was traversed via.
 

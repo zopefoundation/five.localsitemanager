@@ -102,7 +102,7 @@ class FiveVerifyingAdapterLookup(VerifyingAdapterLookup):
 
             _subscriptions(byorder[order], required, extendors, u'',
                            result, 0, order)
-            result = [ _wrap(r, registry) for r in result ]
+            result = [_wrap(r, registry) for r in result]
 
         self._subscribe(*required)
 
@@ -239,8 +239,8 @@ class PersistentComponents(PersistentComponents, ObjectManager):
             reg.component = _wrap(reg.component, self)
             yield reg
 
-    def registerUtility(self, component=None, provided=None, name=u'', info=u'',
-                        event=True, factory=None):
+    def registerUtility(self, component=None, provided=None, name=u'',
+                        info=u'', event=True, factory=None):
         if factory:
             if component:
                 raise TypeError("Can't specify factory and component.")
@@ -295,7 +295,7 @@ class PersistentComponents(PersistentComponents, ObjectManager):
             zope.event.notify(zope.component.interfaces.Registered(
                 UtilityRegistration(
                     self, provided, name, component, info, factory)
-                ))
+            ))
 
     def unregisterUtility(self, component=None, provided=None, name=u'',
                           factory=None):

@@ -14,7 +14,7 @@ setup(
                       open("CHANGES.rst").read()),
     classifiers=[
         'Environment :: Web Environment',
-        'Framework :: Zope2',
+        'Framework :: Zope :: 4',
         'License :: OSI Approved :: Zope Public License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
@@ -44,7 +44,7 @@ setup(
         'zope.lifecycleevent',
         'zope.site',
         'zope.testing',
-        'Zope2 >= 4.0a5',
+        'Zope >= 4.0b1',
     ],
     zip_safe=False,
 )

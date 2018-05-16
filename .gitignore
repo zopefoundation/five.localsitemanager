@@ -12,6 +12,7 @@ __pycache__
 .mr.developer.cfg
 .tox
 *.dll
+*.egg-info
 *.pyc
 *.pyo
 *.so

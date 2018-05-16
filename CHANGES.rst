@@ -6,6 +6,8 @@ Changelog
 
 * More PEP8 compliance.
 
+* Avoid deprecation warnings in tests.
+
 
 3.0.1 - 2017-05-27
 ------------------

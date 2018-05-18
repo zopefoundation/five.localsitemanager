@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.1 - unreleased
+3.1 (2018-05-18)
 ----------------
 
 * More PEP8 compliance.

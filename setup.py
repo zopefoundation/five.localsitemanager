@@ -1,11 +1,11 @@
 from setuptools import setup
 
-__version__ = '3.0.2.dev0'
+__version__ = '3.1.dev0'
 
 setup(
     name='five.localsitemanager',
     version=__version__,
-    url='https://pypi.python.org/pypi/five.localsitemanager',
+    url='https://github.com/zopefoundation/five.localsitemanager',
     license='ZPL 2.1',
     description='Local site manager implementation for Zope.',
     author='Zope Foundation and Contributors',
@@ -21,7 +21,6 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',

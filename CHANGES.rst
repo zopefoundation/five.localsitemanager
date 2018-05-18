@@ -1,12 +1,14 @@
 Changelog
 =========
 
-3.0.2 - unreleased
-------------------
+3.1 - unreleased
+----------------
 
 * More PEP8 compliance.
 
 * Avoid deprecation warnings in tests.
+
+* Drop support for Python 3.4.
 
 
 3.0.1 - 2017-05-27

@@ -4,7 +4,7 @@ Changelog
 3.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added support for Python 3.7
 
 
 3.1 (2018-05-18)

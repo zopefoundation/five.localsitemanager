@@ -324,8 +324,8 @@ When we query the utility, it is returned with its original context:
     <SITestUtility at /a/b/si_util>
     >>> si_util.getPhysicalPath()
     ('', 'a', 'b', 'si_util')
-    >>> si_util.aq_chain
-    [<SITestUtility at /a/b/si_util>, <Folder at /a/b>, <Folder at /a>, <Application at >]
+    >>> [x.getId() for x in si_util.aq_chain]
+    ['si_util', 'b', 'a', 'Zope']
     >>> si_util.absolute_url()
     'a/b/si_util'
 
@@ -501,8 +501,8 @@ Needed to implement our own get_parent that is Acquisition aware.
       ...
     TypeError: ('Not enough context...
 
-    >>> get_parent(folder1_1)
-    <Folder at folder1>
+    >>> get_parent(folder1_1).getId()
+    'folder1'
 
 Any logic that sets up a site manager's ``__bases__`` will use the
 ``find_next_sitemanager`` function to figure out the next closest place to
@@ -550,8 +550,8 @@ Lookup both utilities in the context of the first site manager:
     >>> util1
     <Utility AQTestUtility "util1">
 
-    >>> util1.aq_chain
-    [<Utility AQTestUtility "util1">, <Folder at folder1>]
+    >>> [x.id for x in util1.aq_chain]
+    ['util1', 'folder1']
 
 The second utility isn't available in the first site manager:
 
@@ -568,15 +568,15 @@ Lookup both utilities in the context of the second site manager:
 We expect to get wrapped in the context of the site manager the utility is
 registered with:
 
-    >>> util1.aq_chain
-    [<Utility AQTestUtility "util1">, <Folder at folder1>]
+    >>> [x.id for x in util1.aq_chain]
+    ['util1', 'folder1']
 
     >>> util1_1 = queryUtility(ITestUtility, name=u'util1_1')
     >>> util1_1
     <Utility AQTestUtility "util1_1">
 
-    >>> util1_1.aq_chain
-    [<Utility AQTestUtility "util1_1">, <Folder at folder1/folder1_1>, <Folder at folder1>]
+    >>> [x.id for x in util1_1.aq_chain]
+    ['util1_1', 'folder1_1', 'folder1']
 
 Utilities stored with relative path
 -----------------------------------
@@ -645,8 +645,8 @@ site manager:
     >>> localutil1
     <Utility AQTestUtility "localutil1">
 
-    >>> localutil1.aq_chain
-    [<Utility AQTestUtility "localutil1">, <Folder at folder1>]
+    >>> [x.id for x in localutil1.aq_chain]
+    ['localutil1', 'folder1']
 
 Clean up
 --------

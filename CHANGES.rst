@@ -1,8 +1,8 @@
 Changelog
 =========
 
-3.3 (unreleased)
-----------------
+3.2.1 (2018-10-11)
+------------------
 
 - Update the tests to a current `persistent` version.
 

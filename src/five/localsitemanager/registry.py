@@ -17,19 +17,19 @@ import six
 
 import Acquisition
 import persistent
-import zope.component.interfaces
 import zope.event
+import zope.interface.interfaces
 from Acquisition.interfaces import IAcquirer
 from OFS.ObjectManager import ObjectManager
 from zope.component.hooks import getSite
 from zope.component.interfaces import ISite
 from zope.component.persistentregistry import PersistentComponents
-from zope.component.registry import _getUtilityProvided
-from zope.component.registry import UtilityRegistration
 from zope.interface.adapter import _lookup
 from zope.interface.adapter import _lookupAll
 from zope.interface.adapter import _subscriptions
 from zope.interface.adapter import VerifyingAdapterLookup
+from zope.interface.registry import UtilityRegistration
+from zope.interface.registry import _getUtilityProvided
 from ZPublisher.BaseRequest import RequestContainer
 
 from five.localsitemanager.utils import get_parent
@@ -292,7 +292,7 @@ class PersistentComponents(PersistentComponents, ObjectManager):
             self.utilities.subscribe((), provided, wrapped_component)
 
         if event:
-            zope.event.notify(zope.component.interfaces.Registered(
+            zope.event.notify(zope.interface.interfaces.Registered(
                 UtilityRegistration(
                     self, provided, name, component, info, factory)
             ))

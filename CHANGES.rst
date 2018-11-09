@@ -1,8 +1,8 @@
 Changelog
 =========
 
-3.3 (unreleased)
-----------------
+3.2.2 (2018-11-09)
+------------------
 
 - Fix deprecation warnings.
 

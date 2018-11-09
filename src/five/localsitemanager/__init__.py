@@ -15,7 +15,7 @@
 
 from Acquisition import aq_base
 from zope.component.globalregistry import base
-from zope.component.interfaces import ComponentLookupError
+from zope.interface.interfaces import ComponentLookupError
 from zope.component.interfaces import ISite
 
 from five.localsitemanager.registry import PersistentComponents

@@ -4,7 +4,7 @@ Changelog
 3.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Fix deprecation warnings.
 
 
 3.2.1 (2018-10-11)

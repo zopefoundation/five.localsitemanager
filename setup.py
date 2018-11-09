@@ -39,7 +39,7 @@ setup(
         'six',
         'zope.component',
         'zope.event',
-        'zope.interface',
+        'zope.interface >= 3.8',
         'zope.location',
         'zope.lifecycleevent',
         'zope.site',

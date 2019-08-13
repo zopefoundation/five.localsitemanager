@@ -6,10 +6,10 @@ lib
 include
 man
 parts
-
 __pycache__
 .installed.cfg
 *.dll
+*.egg-info
 *.pyc
 *.pyo
 *.so

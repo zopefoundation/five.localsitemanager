@@ -13,6 +13,7 @@ setup(
     long_description=(open("README.rst").read() + "\n" +
                       open("CHANGES.rst").read()),
     classifiers=[
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Zope :: 4',
         'License :: OSI Approved :: Zope Public License',

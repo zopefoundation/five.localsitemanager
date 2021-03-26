@@ -4,19 +4,19 @@ Changelog
 3.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+* Add support for Python 3.8 and 3.9.
 
 
 3.2.2 (2018-11-09)
 ------------------
 
-- Fix deprecation warnings.
+* Fix deprecation warnings.
 
 
 3.2.1 (2018-10-11)
 ------------------
 
-- Update the tests to a current `persistent` version.
+* Update the tests to a current `persistent` version.
 
 
 3.2 (2018-10-05)

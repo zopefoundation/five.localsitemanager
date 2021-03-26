@@ -1,6 +1,7 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from zope.location.interfaces import IRoot
 
-from Acquisition import aq_parent, aq_inner
 
 _marker = object()
 

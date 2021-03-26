@@ -1,6 +1,7 @@
 import unittest
-from Testing.ZopeTestCase import ZopeDocFileSuite
+
 from Testing.ZopeTestCase import FunctionalDocFileSuite
+from Testing.ZopeTestCase import ZopeDocFileSuite
 
 
 def test_suite():

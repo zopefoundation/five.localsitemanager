@@ -24,15 +24,16 @@ from OFS.ObjectManager import ObjectManager
 from zope.component.hooks import getSite
 from zope.component.interfaces import ISite
 from zope.component.persistentregistry import PersistentComponents
+from zope.interface.adapter import VerifyingAdapterLookup
 from zope.interface.adapter import _lookup
 from zope.interface.adapter import _lookupAll
 from zope.interface.adapter import _subscriptions
-from zope.interface.adapter import VerifyingAdapterLookup
 from zope.interface.registry import UtilityRegistration
 from zope.interface.registry import _getUtilityProvided
 from ZPublisher.BaseRequest import RequestContainer
 
 from five.localsitemanager.utils import get_parent
+
 
 _marker = object()
 

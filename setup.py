@@ -1,11 +1,17 @@
 from setuptools import setup
 
+
 version = '3.3.dev0'
 
 setup(
     name='five.localsitemanager',
     version=version,
     url='https://github.com/zopefoundation/five.localsitemanager',
+    project_urls={
+        'Issue Tracker': ('https://github.com/zopefoundation/'
+                          'five.localsitemanager/issues'),
+        'Sources': 'https://github.com/zopefoundation/five.localsitemanager',
+    },
     license='ZPL 2.1',
     description='Local site manager implementation for Zope.',
     author='Zope Foundation and Contributors',
@@ -16,6 +22,7 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Zope :: 4',
+        'Framework :: Zope :: 5',
         'License :: OSI Approved :: Zope Public License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
@@ -25,6 +32,8 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Internet :: WWW/HTTP :: Site Management',
     ],
@@ -33,6 +42,7 @@ setup(
     package_dir={'': 'src'},
     namespace_packages=['five'],
     include_package_data=True,
+    python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*',
     install_requires=[
         'Acquisition',
         'persistent',

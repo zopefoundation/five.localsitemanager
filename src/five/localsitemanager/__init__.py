@@ -14,14 +14,14 @@
 """
 
 from Acquisition import aq_base
+from Products.Five.component import enableSite
+from Products.Five.component.interfaces import IObjectManagerSite
 from zope.component.globalregistry import base
-from zope.interface.interfaces import ComponentLookupError
 from zope.component.interfaces import ISite
+from zope.interface.interfaces import ComponentLookupError
 
 from five.localsitemanager.registry import PersistentComponents
 from five.localsitemanager.utils import get_parent
-from Products.Five.component import enableSite
-from Products.Five.component.interfaces import IObjectManagerSite
 
 
 def make_site(obj, iface=ISite):

@@ -1,7 +1,7 @@
 from setuptools import setup
 
 
-version = '3.3.dev0'
+version = '3.3'
 
 setup(
     name='five.localsitemanager',

@@ -1,7 +1,7 @@
 from setuptools import setup
 
 
-version = '3.4.dev0'
+version = '3.4'
 
 setup(
     name='five.localsitemanager',
@@ -35,6 +35,7 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Internet :: WWW/HTTP :: Site Management',
     ],

@@ -13,8 +13,6 @@
 """Component registry for local site manager.
 """
 
-import six
-
 import Acquisition
 import persistent
 import zope.event
@@ -42,7 +40,7 @@ class FiveVerifyingAdapterLookup(VerifyingAdapterLookup):
 
     # override some AdapterLookupBase methods for acquisition wrapping
 
-    def _uncached_lookup(self, required, provided, name=u''):
+    def _uncached_lookup(self, required, provided, name=''):
         result = None
         order = len(required)
         for registry in self._registry.ro:
@@ -78,13 +76,13 @@ class FiveVerifyingAdapterLookup(VerifyingAdapterLookup):
             components = byorder[order]
             tmp_result = {}
             _lookupAll(components, required, extendors, tmp_result, 0, order)
-            for k, v in six.iteritems(tmp_result):
+            for k, v in tmp_result.items():
                 tmp_result[k] = _wrap(v, registry)
             result.update(tmp_result)
 
         self._subscribe(*required)
 
-        return tuple(six.iteritems(result))
+        return tuple(result.items())
 
     def _uncached_subscriptions(self, required, provided):
         order = len(required)
@@ -101,7 +99,7 @@ class FiveVerifyingAdapterLookup(VerifyingAdapterLookup):
                 if extendors is None:
                     continue
 
-            _subscriptions(byorder[order], required, extendors, u'',
+            _subscriptions(byorder[order], required, extendors, '',
                            result, 0, order)
             result = [_wrap(r, registry) for r in result]
 
@@ -217,7 +215,7 @@ class PersistentComponents(PersistentComponents, ObjectManager):
     """
 
     def _init_registries(self):
-        super(PersistentComponents, self)._init_registries()
+        super()._init_registries()
         utilities = Acquisition.aq_base(self.utilities)
         utilities.LookupClass = FiveVerifyingAdapterLookup
         utilities._createLookup()
@@ -233,15 +231,15 @@ class PersistentComponents(PersistentComponents, ObjectManager):
         path = getattr(site, 'getPhysicalPath', None)
         if path is not None and callable(path):
             url = '/'.join(path())
-        return "<%s %s>" % (self.__class__.__name__, url)
+        return "<{} {}>".format(self.__class__.__name__, url)
 
     def registeredUtilities(self):
-        for reg in super(PersistentComponents, self).registeredUtilities():
+        for reg in super().registeredUtilities():
             reg.component = _wrap(reg.component, self)
             yield reg
 
-    def registerUtility(self, component=None, provided=None, name=u'',
-                        info=u'', event=True, factory=None):
+    def registerUtility(self, component=None, provided=None, name='',
+                        info='', event=True, factory=None):
         if factory:
             if component:
                 raise TypeError("Can't specify factory and component.")
@@ -263,7 +261,7 @@ class PersistentComponents(PersistentComponents, ObjectManager):
             self.unregisterUtility(reg[0], provided, name)
 
         subscribed = False
-        for ((p, _), data) in six.iteritems(self._utility_registrations):
+        for ((p, _), data) in self._utility_registrations.items():
             if p == provided and data[0] == component:
                 subscribed = True
                 break
@@ -298,7 +296,7 @@ class PersistentComponents(PersistentComponents, ObjectManager):
                     self, provided, name, component, info, factory)
             ))
 
-    def unregisterUtility(self, component=None, provided=None, name=u'',
+    def unregisterUtility(self, component=None, provided=None, name='',
                           factory=None):
         if factory:
             if component:

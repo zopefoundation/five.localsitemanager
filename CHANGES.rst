@@ -5,6 +5,8 @@ Changelog
 ----------------
 
 
+* Drop support for Python 3.7.
+
 4.0 (2023-02-01)
 ----------------
 

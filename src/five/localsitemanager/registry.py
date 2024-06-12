@@ -231,7 +231,7 @@ class PersistentComponents(PersistentComponents, ObjectManager):
         path = getattr(site, 'getPhysicalPath', None)
         if path is not None and callable(path):
             url = '/'.join(path())
-        return "<{} {}>".format(self.__class__.__name__, url)
+        return f"<{self.__class__.__name__} {url}>"
 
     def registeredUtilities(self):
         for reg in super().registeredUtilities():

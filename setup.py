@@ -1,4 +1,4 @@
-from setuptools import find_packages
+from setuptools import find_namespace_packages
 from setuptools import setup
 
 
@@ -34,9 +34,8 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Site Management',
     ],
     keywords='zope five sitemanager',
-    packages=find_packages('src'),
+    packages=find_namespace_packages('src'),
     package_dir={'': 'src'},
-    namespace_packages=['five'],
     include_package_data=True,
     python_requires='>=3.9',
     install_requires=[

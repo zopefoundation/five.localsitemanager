@@ -5,6 +5,8 @@ Changelog
 ----------------
 
 
+* Drop support for ``pkg_resources`` namespace and replace it with PEP 420 native namespace.
+
 * Drop support for Python 3.8.
 
 * Add support for Python 3.13.

@@ -33,9 +33,6 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Site Management',
     ],
     keywords='zope five sitemanager',
-    packages=['five', 'five.localsitemanager'],
-    package_dir={'': 'src'},
-    namespace_packages=['five'],
     include_package_data=True,
     python_requires='>=3.9',
     install_requires=[

@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='five.localsitemanager',
-    version='5.0.dev0',
+    version='5.0',
     url='https://github.com/zopefoundation/five.localsitemanager',
     project_urls={
         'Issue Tracker': ('https://github.com/zopefoundation/'
